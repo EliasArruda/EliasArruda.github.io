@@ -1,0 +1,22 @@
+{
+  "name": "elias-arruda-portfolio",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@lucide/vue": "^1.27.0",
+    "@vitejs/plugin-vue": "latest",
+    "simple-icons": "^16.27.1",
+    "vite": "latest",
+    "vue": "latest"
+  },
+  "devDependencies": {
+    "typescript": "~5.9.3",
+    "vue-tsc": "latest"
+  }
+}
