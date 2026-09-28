@@ -458,62 +458,16 @@ onMounted(() => {
         </div>
     </header>
     <main id="conteudo">
-        <section id="inicio" class="hero">
+        <section id="inicio" class="hero personal-hero">
+            <div class="hero-topline"><span><span class="status-dot"></span>{{ extra.role }}</span><span>{{ copy.country }} · {{ en ? 'Working remotely' : 'Atendimento remoto' }}</span></div>
             <div class="hero-copy">
-                <p class="intro-label"><span></span>{{ extra.role }}</p>
-                <h1>
-                    {{ copy.hero }} <em>{{ copy.accent }}</em>
-                </h1>
+                <p class="hello">{{ en ? 'Hi, I’m Elias.' : 'Olá, eu sou Elias.' }}</p>
+                <h1>{{ en ? 'Clear ideas.' : 'Ideias claras.' }}<br/><em>{{ en ? 'Thoughtfully built.' : 'Web bem feita.' }}</em></h1>
                 <p class="hero-intro">{{ copy.intro }}</p>
-                <div class="hero-actions">
-                    <a class="button button-primary" href="#contato"
-                        >{{ extra.cta }} <ArrowUpRight :size="19" /></a
-                    ><a class="text-link" href="#projeto"
-                        >{{ extra.work }} <ArrowRight :size="18"
-                    /></a>
-                </div>
-                <p class="hero-note"><Check :size="16" />{{ extra.note }}</p>
+                <div class="hero-actions"><a class="button button-primary" href="#contato">{{ extra.cta }} <ArrowUpRight :size="19"/></a><a class="text-link" href="#projeto">{{ extra.work }} <ArrowRight :size="18"/></a></div>
             </div>
-            <aside class="hero-aside" :aria-label="extra.process">
-                <div class="calm-art" aria-hidden="true">
-                    <div class="orbit orbit-one"></div>
-                    <div class="orbit orbit-two"></div>
-                    <div class="orbit orbit-three"></div>
-                    <span class="art-dot"></span
-                    ><span class="art-caption">ideia → clareza → web</span>
-                </div>
-                <div class="aside-bottom">
-                    <span class="status-dot"></span>
-                    <p>{{ extra.available }}</p>
-                    <a href="#contato" :aria-label="copy.contact"><ArrowUpRight :size="23" /></a>
-                </div>
-            </aside>
-        </section>
-        <section id="servicos" class="services-section section-space">
-            <div class="section-heading">
-                <h2>{{ copy.servicesTitle }}</h2>
-                <p>{{ copy.servicesIntro }}</p>
-            </div>
-            <div class="services-list">
-                <details v-for="(service, index) in copy.services" :key="index" :open="index === 0">
-                    <summary>
-                        <h3>{{ service.title }}</h3>
-                        <ChevronDown :size="24" />
-                    </summary>
-                    <div class="service-details">
-                        <p>{{ service.description }}</p>
-                        <ul>
-                            <li v-for="item in service.items" :key="item[0]">
-                                <Check :size="17" />
-                                <div>
-                                    <strong>{{ item[0] }}</strong
-                                    ><span>{{ item[1] }}</span>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </details>
-            </div>
+            <aside class="hero-aside personal-visual" :aria-label="extra.role"><div class="visual-inner"><img class="portrait" src="/elias-arruda.jpg" alt="Elias Arruda" width="800" height="800" fetchpriority="high"/><span class="portrait-signature">Elias Arruda<span>.</span></span></div><a class="round-contact" href="#contato" :aria-label="copy.contact"><ArrowUpRight :size="36"/></a></aside>
+            <div class="hero-bottom"><span>{{ en ? 'Design-minded. Built with care.' : 'Olhar para o design. Cuidado com o código.' }}</span><a href="#projeto">{{ en ? 'Selected work' : 'Projetos selecionados' }} ↓</a></div>
         </section>
         <section id="projeto" class="work-section section-space">
             <div class="section-heading">
@@ -578,6 +532,32 @@ onMounted(() => {
                     <path :d="siGithub.path" fill="currentColor" /></svg
                 >{{ extra.all }} <ArrowUpRight :size="16"
             /></a>
+        </section>
+        <section id="servicos" class="services-section section-space">
+            <div class="section-heading">
+                <h2>{{ copy.servicesTitle }}</h2>
+                <p>{{ copy.servicesIntro }}</p>
+            </div>
+            <div class="services-list">
+                <details v-for="(service, index) in copy.services" :key="index" :open="index === 0">
+                    <summary>
+                        <h3>{{ service.title }}</h3>
+                        <ChevronDown :size="24" />
+                    </summary>
+                    <div class="service-details">
+                        <p>{{ service.description }}</p>
+                        <ul>
+                            <li v-for="item in service.items" :key="item[0]">
+                                <Check :size="17" />
+                                <div>
+                                    <strong>{{ item[0] }}</strong
+                                    ><span>{{ item[1] }}</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
         </section>
         <section class="process-section section-space">
             <div class="process-heading">
