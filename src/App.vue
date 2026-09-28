@@ -462,11 +462,11 @@ onMounted(() => {
             <div class="hero-topline"><span><span class="status-dot"></span>{{ extra.role }}</span><span>{{ copy.country }} · {{ en ? 'Working remotely' : 'Atendimento remoto' }}</span></div>
             <div class="hero-copy">
                 <p class="hello">{{ en ? 'Hi, I’m Elias.' : 'Olá, eu sou Elias.' }}</p>
-                <h1>{{ en ? 'Clear ideas.' : 'Ideias claras.' }}<br/><em>{{ en ? 'Thoughtfully built.' : 'Web bem feita.' }}</em></h1>
+                <h1>{{ en ? 'Elias Arruda.' : 'Elias Arruda.' }}<br/><em>{{ en ? 'Web developer.' : 'Desenvolvedor web.' }}</em></h1>
                 <p class="hero-intro">{{ copy.intro }}</p>
                 <div class="hero-actions"><a class="button button-primary" href="#contato">{{ extra.cta }} <ArrowUpRight :size="19"/></a><a class="text-link" href="#projeto">{{ extra.work }} <ArrowRight :size="18"/></a></div>
             </div>
-            <aside class="hero-aside personal-visual" :aria-label="extra.role"><div class="visual-inner"><img class="portrait" src="/elias-arruda.jpg" alt="Elias Arruda" width="800" height="800" fetchpriority="high"/><span class="portrait-signature">Elias Arruda<span>.</span></span></div><a class="round-contact" href="#contato" :aria-label="copy.contact"><ArrowUpRight :size="36"/></a></aside>
+
             <div class="hero-bottom"><span>{{ en ? 'Design-minded. Built with care.' : 'Olhar para o design. Cuidado com o código.' }}</span><a href="#projeto">{{ en ? 'Selected work' : 'Projetos selecionados' }} ↓</a></div>
         </section>
         <section id="projeto" class="work-section section-space">
