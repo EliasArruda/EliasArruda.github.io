@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 import {
     ArrowUpRight,
     ArrowRight,
@@ -17,8 +17,55 @@ import {
     Monitor,
     Radio,
     Braces,
+    Home,
+    FolderOpen,
+    Layers,
+    Send,
+    Database,
+    Server,
+    Smartphone,
+    ExternalLink,
+    Copy,
+    CheckCheck,
 } from "@lucide/vue";
-import { siGithub } from "simple-icons";
+import {
+    siGithub,
+    siVuedotjs,
+    siTypescript,
+    siGo,
+    siDotnet,
+    siPostgresql,
+    siGit,
+} from "simple-icons";
+const techs = [siVuedotjs, siTypescript, siGo, siDotnet, siPostgresql, siGit];
+const activeSection = ref("inicio");
+let sectionObserver: IntersectionObserver | undefined;
+onMounted(() => {
+    sectionObserver = new IntersectionObserver(
+        (entries) => {
+            for (const entry of entries)
+                if (entry.isIntersecting)
+                    activeSection.value =
+                        entry.target.id === "conteudo" ? "inicio" : entry.target.id;
+        },
+        { rootMargin: "-8% 0px -55% 0px", threshold: 0 },
+    );
+    for (const id of ["conteudo", "projeto", "servicos", "sobre", "contato"]) {
+        const element = document.getElementById(id);
+        if (element) sectionObserver.observe(element);
+    }
+});
+onUnmounted(() => sectionObserver?.disconnect());
+const copied = ref(false);
+const copyEmail = async () => {
+    try {
+        await navigator.clipboard.writeText("eliaspessoal06@gmail.com");
+        copied.value = true;
+        setTimeout(() => (copied.value = false), 2500);
+    } catch {
+        window.location.href = "mailto:eliaspessoal06@gmail.com";
+    }
+};
 const language = ref<"pt" | "en">("pt");
 const menuOpen = ref(false);
 const languageMenu = ref<HTMLDetailsElement | null>(null);
@@ -436,353 +483,439 @@ onMounted(() => {
 
 <template>
     <a class="skip-link" href="#conteudo">{{ copy.skip }}</a>
-    <div class="opening">
-        <header class="site-header">
-            <a class="brand" href="#inicio" :aria-label="copy.homeLabel" @click="closeMenu"
-                >ea<span>·</span></a
+    <header class="site-header">
+        <a class="brand" href="#inicio" :aria-label="copy.homeLabel">ea<span>.</span></a>
+        <nav
+            id="main-navigation"
+            :class="['navigation', { 'is-open': menuOpen }]"
+            :aria-label="copy.navLabel"
+        >
+            <a
+                href="#inicio"
+                :aria-current="activeSection === 'inicio' ? 'location' : undefined"
+                @click="closeMenu"
+                ><Home :size="17" /><span>{{ en ? "Home" : "Início" }}</span></a
             >
-            <nav
-                id="main-navigation"
-                :class="['navigation', { 'is-open': menuOpen }]"
-                :aria-label="copy.navLabel"
+            <a
+                href="#projeto"
+                :aria-current="activeSection === 'projeto' ? 'location' : undefined"
+                @click="closeMenu"
+                ><FolderOpen :size="17" /><span>{{ en ? "Projects" : "Projetos" }}</span></a
             >
-                <a href="#projeto" @click="closeMenu"
-                    >{{ en ? "Work" : "Projetos" }}<span>↗</span></a
-                >
-                <a href="#servicos" @click="closeMenu">{{ copy.nav[1] }}</a
-                ><a href="#sobre" @click="closeMenu">{{ copy.nav[2] }}</a>
-                <a href="#contato" @click="closeMenu">{{ copy.nav[3] }}<span>↗</span></a>
-            </nav>
-            <div class="header-tools">
-                <details ref="languageMenu" class="language-switcher">
-                    <summary :aria-label="copy.languageLabel">
-                        {{ language.toUpperCase() }}<ChevronDown :size="13" />
-                    </summary>
-                    <div class="language-options">
-                        <button @click="setLanguage('pt')" :aria-pressed="!en">Português</button
-                        ><button @click="setLanguage('en')" :aria-pressed="en">English</button>
-                    </div>
-                </details>
-                <button
-                    class="menu-toggle"
-                    :aria-label="menuOpen ? copy.close : copy.menu"
-                    :aria-expanded="menuOpen"
-                    aria-controls="main-navigation"
-                    @click="menuOpen = !menuOpen"
-                    @keydown.esc="closeMenu"
-                >
-                    <X v-if="menuOpen" :size="22" /><Menu v-else :size="22" />
-                </button>
-            </div>
-        </header>
-        <main id="conteudo">
-            <section id="inicio" class="hero">
-                <div class="hero-caption">
-                    <span
-                        ><Code2 :size="16" aria-hidden="true" />{{
-                            en ? "Independent developer" : "Desenvolvedor independente"
-                        }}</span
-                    ><span
-                        ><MapPin :size="15" aria-hidden="true" />{{
-                            en
-                                ? "Based in Brazil · Working remotely"
-                                : "Brasil · Atendimento remoto"
-                        }}</span
-                    >
+            <a
+                href="#servicos"
+                :aria-current="activeSection === 'servicos' ? 'location' : undefined"
+                @click="closeMenu"
+                ><Layers :size="17" /><span>{{ en ? "Services" : "Serviços" }}</span></a
+            >
+            <a
+                href="#sobre"
+                :aria-current="activeSection === 'sobre' ? 'location' : undefined"
+                @click="closeMenu"
+                ><Code2 :size="17" /><span>{{ en ? "About" : "Sobre" }}</span></a
+            >
+            <a
+                href="#contato"
+                :aria-current="activeSection === 'contato' ? 'location' : undefined"
+                @click="closeMenu"
+                ><Mail :size="17" /><span>{{ en ? "Contact" : "Contato" }}</span></a
+            >
+        </nav>
+        <div class="header-tools">
+            <details ref="languageMenu" class="language-switcher">
+                <summary>{{ en ? "EN" : "PT" }}<ChevronDown :size="13" /></summary>
+                <div class="language-options">
+                    <button @click="setLanguage('pt')" :aria-pressed="!en">Português</button
+                    ><button @click="setLanguage('en')" :aria-pressed="en">English</button>
                 </div>
-                <h1>
-                    Elias <span class="surname">Arruda<span class="name-period">.</span></span>
+            </details>
+            <button
+                class="menu-toggle"
+                :aria-label="menuOpen ? copy.close : copy.menu"
+                :aria-expanded="menuOpen"
+                aria-controls="main-navigation"
+                @click="menuOpen = !menuOpen"
+                @keydown.esc="closeMenu"
+            >
+                <X v-if="menuOpen" /><Menu v-else />
+            </button>
+        </div>
+    </header>
+    <div class="layout" id="inicio">
+        <aside class="identity">
+            <div class="identity-art" aria-hidden="true">
+                <span class="art-caption">INDEPENDENT DEVELOPER</span
+                ><span class="monogram">e<span>a</span><b>.</b></span
+                ><Code2 class="art-code" :size="36" /><span class="art-bottom"
+                    >IDEA → CODE → WEB</span
+                >
+            </div>
+            <div class="identity-info">
+                <div class="availability">
+                    <i></i>{{ en ? "Open to freelance projects" : "Aberto a projetos freelance" }}
+                </div>
+                <h2>Elias Arruda<span>.</span></h2>
+                <p>
+                    {{ en ? "Web developer" : "Desenvolvedor web" }}<br /><span>{{
+                        en
+                            ? "Interfaces, APIs & ideas in motion."
+                            : "Interfaces, APIs e ideias em movimento."
+                    }}</span>
+                </p>
+                <div class="location">
+                    <MapPin :size="15" />{{ en ? "Brazil · Remote" : "Brasil · Remoto" }}
+                </div>
+                <div class="socials">
+                    <a
+                        href="https://github.com/EliasArruda"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="GitHub"
+                        ><svg viewBox="0 0 24 24"><path :d="siGithub.path" /></svg></a
+                    ><a href="mailto:eliaspessoal06@gmail.com" aria-label="E-mail"
+                        ><Mail :size="20" /></a
+                    ><a href="#projeto" :aria-label="en ? 'Explore projects' : 'Explorar projetos'"
+                        ><FolderOpen :size="20"
+                    /></a>
+                </div>
+                <a href="#contato" class="button identity-cta"
+                    >{{ en ? "Let’s work together" : "Vamos trabalhar juntos"
+                    }}<ArrowUpRight :size="18"
+                /></a>
+            </div>
+        </aside>
+        <main id="conteudo">
+            <section class="hero" aria-labelledby="hero-title">
+                <p class="intro">
+                    <span class="intro-line"></span
+                    >{{ en ? "Hello, I’m Elias" : "Olá, eu sou o Elias"
+                    }}<span class="wave">✳</span>
+                </p>
+                <h1 id="hero-title">
+                    {{ en ? "BUILDING" : "IDEIAS EM" }}<br /><span>{{
+                        en ? "FOR THE WEB." : "CÓDIGO."
+                    }}</span>
                 </h1>
                 <div class="hero-baseline">
                     <p>
-                        {{ en ? "I turn ideas into websites" : "Transformo ideias em sites"
-                        }}<br />{{ en ? "and web applications." : "e aplicações web." }}
-                    </p>
-                    <a class="hero-contact" href="#contato"
-                        ><span>{{ en ? "Let’s talk" : "Vamos conversar" }}</span
-                        ><ArrowUpRight :size="32"
-                    /></a>
-                </div>
-                <div class="hero-foot">
-                    <span>Vue · TypeScript · .NET</span
-                    ><a href="#projeto"
-                        >{{ en ? "Scroll to explore" : "Conheça meu trabalho" }}
-                        <span aria-hidden="true">↓</span></a
-                    >
-                </div>
-            </section>
-            <section id="projeto" class="work-section">
-                <div class="work-heading">
-                    <h2>
-                        <span class="section-icon"
-                            ><PanelsTopLeft :size="21" aria-hidden="true" /></span
-                        >{{ en ? "Selected work" : "Projetos selecionados" }}<span> (02)</span>
-                    </h2>
-                    <p>
                         {{
                             en
-                                ? "Personal projects. Open code."
-                                : "Projetos autorais. Código aberto."
+                                ? "I build websites and web applications that connect your idea to the people who need it."
+                                : "Desenvolvo sites e aplicações web que conectam sua ideia às pessoas que precisam dela."
                         }}
                     </p>
                 </div>
-                <article class="showcase">
+                <div class="hero-actions">
+                    <a href="#projeto" class="button"
+                        >{{ en ? "Explore my work" : "Conheça meu trabalho"
+                        }}<ArrowUpRight :size="19" /></a
+                    ><button class="copy-email" @click="copyEmail">
+                        <CheckCheck v-if="copied" :size="17" /><Copy v-else :size="17" />{{
+                            copied ? (en ? "Copied!" : "Copiado!") : "E-mail"
+                        }}<span class="sr-only" role="status">{{
+                            copied ? (en ? "Email copied" : "E-mail copiado") : ""
+                        }}</span>
+                    </button>
+                </div>
+                <div class="hero-specialties">
+                    <span><Monitor :size="17" />Front-end</span
+                    ><span><Server :size="17" />Back-end</span
+                    ><span><Database :size="17" />{{ en ? "Databases" : "Banco de dados" }}</span>
+                </div>
+            </section>
+            <section id="projeto" class="projects section">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">
+                            <FolderOpen :size="15" />{{
+                                en ? "Selected work" : "Trabalhos selecionados"
+                            }}
+                        </p>
+                        <h2>
+                            {{ en ? "From idea" : "Da ideia" }}<br /><span>{{
+                                en ? "to the browser." : "ao navegador."
+                            }}</span>
+                        </h2>
+                    </div>
+                    <span class="section-number">01 /</span>
+                </div>
+                <article class="project featured">
                     <a
-                        class="showcase-stage"
+                        class="project-visual"
                         href="https://veyrascreen.onrender.com/"
                         target="_blank"
                         rel="noopener noreferrer"
                         :aria-label="extra.demo + ': VeyraScreen'"
-                    >
-                        <div class="stage-heading">
-                            <div>
-                                <span class="stage-category"
-                                    ><Radio :size="15" aria-hidden="true" />{{
-                                        en
-                                            ? "Real-time screen sharing"
-                                            : "Compartilhamento de tela em tempo real"
-                                    }}</span
-                                ><span class="stage-name">VeyraScreen</span>
-                            </div>
-                            <span class="stage-arrow"><ArrowUpRight :size="32" /></span>
+                        ><div class="browser-bar">
+                            <span><i></i><i></i><i></i></span><span>veyrascreen.onrender.com</span
+                            ><ExternalLink :size="13" />
                         </div>
                         <img
                             src="/veyra-preview.jpg"
                             :alt="extra.preview"
                             width="1440"
-                            height="1000"
-                            loading="eager"
-                        />
-                    </a>
-                    <div class="showcase-caption">
-                        <div>
-                            <h3>{{ extra.veyra }}</h3>
-                            <p>{{ extra.veyraDesc }}</p>
+                            height="1000" /><span class="visual-link"
+                            ><ArrowUpRight :size="23" /></span
+                    ></a>
+                    <div class="project-info">
+                        <p class="project-category">
+                            <Radio :size="14" />{{
+                                en ? "REAL-TIME APPLICATION" : "APLICAÇÃO EM TEMPO REAL"
+                            }}
+                        </p>
+                        <h3>VeyraScreen</h3>
+                        <p>{{ extra.veyraDesc }}</p>
+                        <div class="tags">
+                            <span>.NET</span><span>Blazor</span><span>WebRTC</span
+                            ><span>SignalR</span>
                         </div>
-                        <div class="showcase-links">
-                            <span>Blazor · SignalR · WebRTC</span
+                        <div class="project-links">
+                            <a
+                                href="https://veyrascreen.onrender.com/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                >{{ en ? "Open project" : "Ver projeto"
+                                }}<ArrowUpRight :size="17" /></a
                             ><a
-                                class="text-link"
                                 href="https://github.com/EliasArruda/VeyraScreen"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                >{{ extra.code }} <ArrowUpRight :size="18"
+                                ><Code2 :size="17" />{{ en ? "Source code" : "Código-fonte" }}</a
+                            >
+                        </div>
+                    </div>
+                </article>
+                <article class="project portfolio">
+                    <div class="portfolio-visual" aria-hidden="true">
+                        <div class="mini-nav">ea. <span>portfolio / 2026</span></div>
+                        <div class="mini-title">IDEIAS EM<br /><span>CÓDIGO.</span></div>
+                        <div class="mini-bottom">
+                            <span>VUE + TYPESCRIPT</span><ArrowUpRight :size="27" />
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <p class="project-category">
+                            <Globe2 :size="14" />{{ en ? "PERSONAL WEBSITE" : "SITE PESSOAL" }}
+                        </p>
+                        <h3>{{ en ? "My space on the web" : "Meu espaço na web" }}</h3>
+                        <p>{{ extra.portfolioDesc }}</p>
+                        <div class="tags">
+                            <span>Vue</span><span>TypeScript</span><span>CSS</span>
+                        </div>
+                        <div class="project-links">
+                            <a
+                                href="https://github.com/EliasArruda/EliasArruda.github.io"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                >{{ en ? "Explore the code" : "Explorar o código"
+                                }}<ArrowUpRight :size="17"
                             /></a>
                         </div>
                     </div>
                 </article>
-                <article class="portfolio-project">
-                    <span class="portfolio-wordmark" aria-hidden="true"><Code2 :size="42" /></span>
-                    <div>
-                        <span>{{
-                            en
-                                ? "Personal website / Vue + TypeScript"
-                                : "Site pessoal / Vue + TypeScript"
-                        }}</span>
-                        <h3>
-                            {{
-                                en
-                                    ? "This space, from design to code."
-                                    : "Este espaço, do design ao código."
-                            }}
-                        </h3>
-                        <p>
-                            {{
-                                en
-                                    ? "A responsive portfolio with two languages and a direct contact channel."
-                                    : "Um portfólio responsivo, com dois idiomas e um canal direto de contato."
-                            }}
-                        </p>
-                    </div>
-                    <a
-                        class="project-code"
-                        href="https://github.com/EliasArruda/EliasArruda.github.io"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        :aria-label="extra.code + ': Portfolio'"
-                        ><ArrowUpRight :size="26"
-                    /></a>
-                </article>
                 <a
-                    class="all-work text-link"
+                    class="more-work"
                     href="https://github.com/EliasArruda?tab=repositories"
                     target="_blank"
                     rel="noopener noreferrer"
-                    >{{ extra.all }} <ArrowUpRight :size="16"
+                    >{{ extra.all }}<ArrowRight :size="17"
                 /></a>
             </section>
-            <section id="servicos" class="services-section">
-                <div class="services-intro">
-                    <span class="section-label"
-                        ><Code2 :size="18" aria-hidden="true" />{{
-                            en ? "What I do" : "Como posso ajudar"
-                        }}</span
-                    >
-                    <h2>
-                        {{ en ? "A place for your business." : "Um lugar para seu negócio."
-                        }}<br /><em>{{
-                            en ? "A tool for your idea." : "Uma ferramenta para sua ideia."
-                        }}</em>
-                    </h2>
+            <section id="servicos" class="section services">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">
+                            <Layers :size="15" />{{
+                                en ? "What I can build" : "O que posso construir"
+                            }}
+                        </p>
+                        <h2>
+                            {{ en ? "Your next" : "Seu próximo" }}<br /><span>{{
+                                en ? "digital step." : "passo digital."
+                            }}</span>
+                        </h2>
+                    </div>
+                    <span class="section-number">02 /</span>
                 </div>
-                <div class="services-list">
-                    <article v-for="(service, index) in copy.services" :key="service.title">
+                <div class="service-grid">
+                    <article
+                        v-for="(service, index) in copy.services"
+                        :key="service.title"
+                        :class="['service', 'service-' + index]"
+                    >
                         <div class="service-top">
                             <component
                                 :is="[Globe2, PanelsTopLeft, AppWindow][index]"
                                 :size="30"
-                                aria-hidden="true"
                             /><span>0{{ index + 1 }}</span>
                         </div>
                         <h3>{{ service.title }}</h3>
                         <p>{{ service.description }}</p>
                         <ul>
                             <li v-for="item in service.items" :key="item[0]">
-                                <Check :size="15" />{{ item[0] }}
+                                <Check :size="14" />{{ item[0] }}
                             </li>
                         </ul>
+                        <a
+                            href="#contato"
+                            :aria-label="(en ? 'Talk about ' : 'Conversar sobre ') + service.title"
+                            ><ArrowUpRight :size="24"
+                        /></a>
                     </article>
                 </div>
             </section>
-            <section id="sobre" class="about-section">
-                <div class="about-label">
-                    <span class="section-label"
-                        ><MessageCircle :size="18" aria-hidden="true" />{{
-                            en ? "Behind the code" : "Por trás do código"
-                        }}</span
-                    ><a
-                        class="text-link"
-                        href="https://github.com/EliasArruda"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        >GitHub <ArrowUpRight :size="17"
-                    /></a>
+            <section id="sobre" class="section about">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">
+                            <Code2 :size="15" />{{ en ? "Behind the code" : "Por trás do código" }}
+                        </p>
+                        <h2>
+                            {{ en ? "The person." : "A pessoa." }}<br /><span>{{
+                                en ? "The process." : "O processo."
+                            }}</span>
+                        </h2>
+                    </div>
+                    <span class="section-number">03 /</span>
                 </div>
-                <div class="about-main">
-                    <h2>
+                <div class="about-grid">
+                    <article class="about-story">
+                        <MessageCircle :size="24" />
+                        <h3>{{ en ? "A direct conversation." : "Uma conversa direta." }}</h3>
+                        <p>{{ extra.aboutBody }}</p>
+                        <p>{{ extra.aboutSecond }}</p>
+                    </article>
+                    <article class="stack-panel">
+                        <Braces :size="24" />
+                        <h3>{{ en ? "My toolbox" : "Minha caixa de ferramentas" }}</h3>
+                        <div class="tech-grid">
+                            <div v-for="tech in techs" :key="tech.slug">
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    aria-hidden="true"
+                                    :style="{
+                                        color:
+                                            tech.slug === 'dotnet'
+                                                ? '#b69aee'
+                                                : tech.slug === 'postgresql'
+                                                  ? '#83b6d7'
+                                                  : '#' + tech.hex,
+                                    }"
+                                >
+                                    <path :d="tech.path" /></svg
+                                ><span>{{ tech.title }}</span>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="process-panel">
+                        <div v-for="(step, index) in extra.steps" :key="step[0]">
+                            <span class="step-number">0{{ index + 1 }}</span>
+                            <div>
+                                <h3>{{ step[0] }}</h3>
+                                <p>{{ step[1] }}</p>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </section>
+            <section id="contato" class="section contact-section">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">
+                            <Send :size="15" />{{
+                                en ? "Let’s build something" : "Vamos construir algo"
+                            }}
+                        </p>
+                        <h2>
+                            {{ en ? "Great projects" : "Bons projetos" }}<br /><span>{{
+                                en ? "start with a hello." : "começam com um olá."
+                            }}</span>
+                        </h2>
+                    </div>
+                </div>
+                <div class="contact-intro">
+                    <p>
                         {{
                             en
-                                ? "You talk to the person who builds."
-                                : "Você conversa com quem desenvolve."
-                        }}
-                    </h2>
-                    <p>{{ extra.aboutBody }}</p>
-                    <div class="working-method">
-                        <h3>{{ en ? "Before we start" : "Antes de começar" }}</h3>
-                        <p>
-                            {{
-                                en
-                                    ? "We define the scope, deliverables, timeline and price in a proposal. During development, you follow progress and we review adjustments together."
-                                    : "Definimos escopo, entregas, prazo e valor em uma proposta. Durante o desenvolvimento, você acompanha a evolução e revisamos os ajustes juntos."
-                            }}
-                        </p>
-                    </div>
-                    <ul class="tech-list">
-                        <li
-                            v-for="tech in ['Vue', 'TypeScript', 'Go', 'C# / .NET', 'PostgreSQL']"
-                            :key="tech"
-                        >
-                            {{ tech }}
-                        </li>
-                    </ul>
-                </div>
-            </section>
-            <section id="contato" class="contact-section">
-                <div class="contact-heading">
-                    <p class="section-label">
-                        <MessageCircle :size="18" aria-hidden="true" />{{
-                            en ? "Have a project in mind?" : "Tem um projeto em mente?"
+                                ? "Tell me about your idea. We can define the scope and the next steps together."
+                                : "Me conte sobre sua ideia. Podemos definir juntos o escopo e os próximos passos."
                         }}
                     </p>
-                    <h2>{{ en ? "Let’s talk" : "Vamos conversar" }}<ArrowUpRight :size="62" /></h2>
+                    <a href="mailto:eliaspessoal06@gmail.com"
+                        ><Mail :size="18" />eliaspessoal06@gmail.com<ArrowUpRight :size="17"
+                    /></a>
                 </div>
-                <div class="contact-grid">
-                    <div class="contact-copy">
-                        <p>
-                            {{
-                                en
-                                    ? "Tell me what you want to build, who it is for and whether you have a deadline. We can figure out the next step together."
-                                    : "Me conte o que você quer construir, para quem e se já tem um prazo em mente. Podemos entender o próximo passo juntos."
-                            }}
-                        </p>
-                        <span>{{ extra.email }}</span
-                        ><a class="email-link" href="mailto:eliaspessoal06@gmail.com"
-                            >eliaspessoal06@gmail.com <ArrowUpRight :size="19"
-                        /></a>
+                <form class="contact-form" @submit.prevent="submitContact">
+                    <div class="form-field">
+                        <label for="contact-name">{{ copy.name }}</label
+                        ><input
+                            id="contact-name"
+                            name="name"
+                            :placeholder="copy.namePlaceholder"
+                            autocomplete="name"
+                            maxlength="120"
+                            required
+                        />
                     </div>
-                    <form class="contact-form" @submit.prevent="submitContact">
-                        <div class="form-field">
-                            <label for="contact-name">{{ copy.name }}</label
-                            ><input
-                                id="contact-name"
-                                name="name"
-                                :placeholder="copy.namePlaceholder"
-                                autocomplete="name"
-                                maxlength="120"
-                                required
-                            />
-                        </div>
-                        <div class="form-field">
-                            <label for="contact-email">{{ copy.email }}</label
-                            ><input
-                                id="contact-email"
-                                name="email"
-                                type="email"
-                                :placeholder="copy.emailPlaceholder"
-                                autocomplete="email"
-                                maxlength="254"
-                                required
-                            />
-                        </div>
-                        <div class="form-field form-message">
-                            <label for="contact-message">{{ copy.message }}</label
-                            ><textarea
-                                id="contact-message"
-                                name="message"
-                                :placeholder="copy.messagePlaceholder"
-                                rows="4"
-                                maxlength="5000"
-                                required
-                            ></textarea>
-                        </div>
-                        <input
-                            class="form-honeypot"
-                            name="_honey"
-                            tabindex="-1"
-                            autocomplete="off"
-                            aria-hidden="true"
-                        /><input type="hidden" name="_subject" :value="extra.subject" />
-                        <p class="privacy-note">{{ extra.privacy }}</p>
-                        <button
-                            class="button button-primary form-submit"
-                            :disabled="contactStatus === 'submitting'"
-                        >
-                            <Mail :size="18" />{{
-                                contactStatus === "submitting" ? copy.sending : copy.sendEmail
-                            }}<ArrowUpRight :size="18" />
-                        </button>
-                        <p v-if="contactStatus === 'success'" class="form-status" role="status">
-                            {{ copy.sent }}
-                        </p>
-                        <p v-if="contactStatus === 'error'" class="form-status error" role="alert">
-                            {{ copy.sendError }}
-                            <a href="mailto:eliaspessoal06@gmail.com">{{ extra.email }}</a>
-                        </p>
-                        <p
-                            v-if="contactStatus === 'rate-limited'"
-                            class="form-status error"
-                            role="alert"
-                        >
-                            {{ copy.rateLimited }}
-                        </p>
-                    </form>
-                </div>
+                    <div class="form-field">
+                        <label for="contact-email">{{ copy.email }}</label
+                        ><input
+                            id="contact-email"
+                            name="email"
+                            type="email"
+                            :placeholder="copy.emailPlaceholder"
+                            autocomplete="email"
+                            maxlength="254"
+                            required
+                        />
+                    </div>
+                    <div class="form-field form-message">
+                        <label for="contact-message">{{ copy.message }}</label
+                        ><textarea
+                            id="contact-message"
+                            name="message"
+                            :placeholder="copy.messagePlaceholder"
+                            rows="4"
+                            maxlength="5000"
+                            required
+                        ></textarea>
+                    </div>
+                    <input
+                        class="form-honeypot"
+                        name="_honey"
+                        tabindex="-1"
+                        autocomplete="off"
+                        aria-hidden="true"
+                    /><input type="hidden" name="_subject" :value="extra.subject" />
+                    <p class="privacy-note">{{ extra.privacy }}</p>
+                    <button
+                        class="button button-primary form-submit"
+                        :disabled="contactStatus === 'submitting'"
+                    >
+                        <Mail :size="18" />{{
+                            contactStatus === "submitting" ? copy.sending : copy.sendEmail
+                        }}<ArrowUpRight :size="18" />
+                    </button>
+                    <p v-if="contactStatus === 'success'" class="form-status" role="status">
+                        {{ copy.sent }}
+                    </p>
+                    <p v-if="contactStatus === 'error'" class="form-status error" role="alert">
+                        {{ copy.sendError }}
+                        <a href="mailto:eliaspessoal06@gmail.com">{{ extra.email }}</a>
+                    </p>
+                    <p
+                        v-if="contactStatus === 'rate-limited'"
+                        class="form-status error"
+                        role="alert"
+                    >
+                        {{ copy.rateLimited }}
+                    </p>
+                </form>
             </section>
+            <footer class="site-footer">
+                <span>© {{ new Date().getFullYear() }} Elias Arruda</span
+                ><a href="#inicio">{{ copy.backTop }}<ArrowUpRight :size="15" /></a>
+            </footer>
         </main>
     </div>
-    <footer class="site-footer">
-        <a href="#inicio" class="footer-name">Elias Arruda.</a
-        ><span>© {{ new Date().getFullYear() }} · {{ copy.country }}</span
-        ><a href="#inicio">{{ copy.backTop }} ↑</a>
-    </footer>
 </template>
