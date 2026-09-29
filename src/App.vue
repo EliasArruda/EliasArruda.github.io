@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
+import { usePortfolioMotion } from "./usePortfolioMotion";
+usePortfolioMotion();
 import {
     ArrowUpRight,
     ArrowRight,
@@ -464,6 +466,8 @@ onMounted(() => {
 </script>
 
 <template>
+    <div class="cursor-trail" aria-hidden="true"><span v-for="dot in 10" :key="dot"></span></div>
+    <div class="scroll-progress" aria-hidden="true"></div>
     <a class="skip-link" href="#conteudo">{{ copy.skip }}</a>
     <main id="conteudo">
         <section id="inicio" class="hero">
