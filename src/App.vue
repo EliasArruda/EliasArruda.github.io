@@ -1,6 +1,23 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
-import { ArrowUpRight, ArrowRight, Check, ChevronDown, Mail, Menu, X } from "@lucide/vue";
+import {
+    ArrowUpRight,
+    ArrowRight,
+    Check,
+    ChevronDown,
+    Mail,
+    Menu,
+    X,
+    Globe2,
+    PanelsTopLeft,
+    AppWindow,
+    Code2,
+    MapPin,
+    MessageCircle,
+    Monitor,
+    Radio,
+    Braces,
+} from "@lucide/vue";
 import { siGithub } from "simple-icons";
 const language = ref<"pt" | "en">("pt");
 const menuOpen = ref(false);
@@ -461,12 +478,21 @@ onMounted(() => {
         <main id="conteudo">
             <section id="inicio" class="hero">
                 <div class="hero-caption">
-                    <span>{{ en ? "Independent developer" : "Desenvolvedor independente" }}</span
-                    ><span>{{
-                        en ? "Based in Brazil · Working remotely" : "Brasil · Atendimento remoto"
-                    }}</span>
+                    <span
+                        ><Code2 :size="16" aria-hidden="true" />{{
+                            en ? "Independent developer" : "Desenvolvedor independente"
+                        }}</span
+                    ><span
+                        ><MapPin :size="15" aria-hidden="true" />{{
+                            en
+                                ? "Based in Brazil · Working remotely"
+                                : "Brasil · Atendimento remoto"
+                        }}</span
+                    >
                 </div>
-                <h1>Elias Arruda<span class="name-period">.</span></h1>
+                <h1>
+                    Elias <span class="surname">Arruda<span class="name-period">.</span></span>
+                </h1>
                 <div class="hero-baseline">
                     <p>
                         {{ en ? "I turn ideas into websites" : "Transformo ideias em sites"
@@ -487,7 +513,11 @@ onMounted(() => {
             </section>
             <section id="projeto" class="work-section">
                 <div class="work-heading">
-                    <h2>{{ en ? "Made by me" : "Feito por mim" }}<span> (02)</span></h2>
+                    <h2>
+                        <span class="section-icon"
+                            ><PanelsTopLeft :size="21" aria-hidden="true" /></span
+                        >{{ en ? "Selected work" : "Projetos selecionados" }}<span> (02)</span>
+                    </h2>
                     <p>
                         {{
                             en
@@ -506,11 +536,12 @@ onMounted(() => {
                     >
                         <div class="stage-heading">
                             <div>
-                                <span class="stage-category">{{
-                                    en
-                                        ? "Real-time screen sharing"
-                                        : "Compartilhamento de tela em tempo real"
-                                }}</span
+                                <span class="stage-category"
+                                    ><Radio :size="15" aria-hidden="true" />{{
+                                        en
+                                            ? "Real-time screen sharing"
+                                            : "Compartilhamento de tela em tempo real"
+                                    }}</span
                                 ><span class="stage-name">VeyraScreen</span>
                             </div>
                             <span class="stage-arrow"><ArrowUpRight :size="32" /></span>
@@ -541,7 +572,7 @@ onMounted(() => {
                     </div>
                 </article>
                 <article class="portfolio-project">
-                    <span class="portfolio-wordmark" aria-hidden="true">ea.</span>
+                    <span class="portfolio-wordmark" aria-hidden="true"><Code2 :size="42" /></span>
                     <div>
                         <span>{{
                             en
@@ -582,7 +613,11 @@ onMounted(() => {
             </section>
             <section id="servicos" class="services-section">
                 <div class="services-intro">
-                    <span>{{ en ? "What I do" : "Como posso ajudar" }}</span>
+                    <span class="section-label"
+                        ><Code2 :size="18" aria-hidden="true" />{{
+                            en ? "What I do" : "Como posso ajudar"
+                        }}</span
+                    >
                     <h2>
                         {{ en ? "A place for your business." : "Um lugar para seu negócio."
                         }}<br /><em>{{
@@ -591,7 +626,14 @@ onMounted(() => {
                     </h2>
                 </div>
                 <div class="services-list">
-                    <article v-for="service in copy.services" :key="service.title">
+                    <article v-for="(service, index) in copy.services" :key="service.title">
+                        <div class="service-top">
+                            <component
+                                :is="[Globe2, PanelsTopLeft, AppWindow][index]"
+                                :size="30"
+                                aria-hidden="true"
+                            /><span>0{{ index + 1 }}</span>
+                        </div>
                         <h3>{{ service.title }}</h3>
                         <p>{{ service.description }}</p>
                         <ul>
@@ -604,7 +646,10 @@ onMounted(() => {
             </section>
             <section id="sobre" class="about-section">
                 <div class="about-label">
-                    <span>{{ en ? "Behind the code" : "Por trás do código" }}</span
+                    <span class="section-label"
+                        ><MessageCircle :size="18" aria-hidden="true" />{{
+                            en ? "Behind the code" : "Por trás do código"
+                        }}</span
                     ><a
                         class="text-link"
                         href="https://github.com/EliasArruda"
@@ -644,7 +689,11 @@ onMounted(() => {
             </section>
             <section id="contato" class="contact-section">
                 <div class="contact-heading">
-                    <p>{{ en ? "Have a project in mind?" : "Tem um projeto em mente?" }}</p>
+                    <p class="section-label">
+                        <MessageCircle :size="18" aria-hidden="true" />{{
+                            en ? "Have a project in mind?" : "Tem um projeto em mente?"
+                        }}
+                    </p>
                     <h2>{{ en ? "Let’s talk" : "Vamos conversar" }}<ArrowUpRight :size="62" /></h2>
                 </div>
                 <div class="contact-grid">
