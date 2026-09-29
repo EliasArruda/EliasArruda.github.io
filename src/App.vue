@@ -2,6 +2,8 @@
 import { computed, onMounted, ref } from "vue";
 import { usePortfolioMotion } from "./usePortfolioMotion";
 usePortfolioMotion();
+import { useTheme } from "./useTheme";
+const { theme, toggleTheme } = useTheme();
 import {
     ArrowUpRight,
     ArrowRight,
@@ -29,6 +31,8 @@ import {
     ExternalLink,
     Copy,
     CheckCheck,
+    Sun,
+    Moon,
 } from "@lucide/vue";
 import {
     siGithub,
@@ -466,7 +470,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="cursor-trail" aria-hidden="true"><span v-for="dot in 10" :key="dot"></span></div>
+    <div class="cursor-trail" aria-hidden="true"><span v-for="dot in 1" :key="dot"></span></div>
     <div class="scroll-progress" aria-hidden="true"></div>
     <a class="skip-link" href="#conteudo">{{ copy.skip }}</a>
     <main id="conteudo">
@@ -478,6 +482,29 @@ onMounted(() => {
                 rel="noopener noreferrer"
                 >✦ {{ en ? "Explore my GitHub" : "Meu GitHub" }}</a
             >
+            <button
+                class="theme-toggle"
+                @click="toggleTheme"
+                :aria-label="
+                    en
+                        ? theme === 'dark'
+                            ? 'Switch to light mode'
+                            : 'Switch to dark mode'
+                        : theme === 'dark'
+                          ? 'Ativar modo claro'
+                          : 'Ativar modo escuro'
+                "
+            >
+                <Sun v-if="theme === 'dark'" :size="19" /><Moon v-else :size="19" /><span>{{
+                    en
+                        ? theme === "dark"
+                            ? "Light"
+                            : "Night"
+                        : theme === "dark"
+                          ? "Claro"
+                          : "Escuro"
+                }}</span>
+            </button>
             <details ref="languageMenu" class="language-switcher">
                 <summary>{{ en ? "EN" : "PT" }}<ChevronDown :size="13" /></summary>
                 <div class="language-options">

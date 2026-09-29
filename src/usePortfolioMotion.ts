@@ -31,7 +31,7 @@ export function usePortfolioMotion() {
                 point.x += (previous.x - point.x) * 0.32;
                 point.y += (previous.y - point.y) * 0.32;
                 dots[index]!.style.transform =
-                    `translate3d(${point.x - 6}px, ${point.y - 6}px, 0) scale(${1 - index * 0.075})`;
+                    `translate3d(${point.x - 13}px, ${point.y - 13}px, 0) scale(${1 - index * 0.075})`;
                 dots[index]!.style.opacity =
                     `${Math.max(0, 1 - (now - lastMove) / 650) * (1 - index * 0.08)}`;
                 previous = point;
@@ -45,6 +45,10 @@ export function usePortfolioMotion() {
                 points.forEach((point) => Object.assign(point, target));
                 started = true;
             }
+            const interactive = (event.target as Element)?.closest(
+                "a, button, summary, input, textarea, [tabindex]",
+            );
+            dots.forEach((dot) => dot.classList.toggle("over-control", Boolean(interactive)));
             lastMove = performance.now();
             if (!frame) frame = requestAnimationFrame(render);
         };

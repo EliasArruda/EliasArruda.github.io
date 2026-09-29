@@ -2,6 +2,20 @@
 <html lang="pt-BR">
     <head>
         <meta charset="UTF-8" />
+        <script>
+            (() => {
+                let theme;
+                try {
+                    theme = localStorage.getItem("portfolio-theme");
+                } catch {}
+                document.documentElement.dataset.theme =
+                    theme === "light" || theme === "dark"
+                        ? theme
+                        : matchMedia("(prefers-color-scheme: dark)").matches
+                          ? "dark"
+                          : "light";
+            })();
+        </script>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="theme-color" content="#101111" />
         <link rel="icon" type="image/svg+xml" href="/brand-mark.svg" />
