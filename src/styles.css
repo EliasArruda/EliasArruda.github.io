@@ -488,6 +488,11 @@ textarea:focus-visible,
     padding: 0;
     border-bottom: 1px dashed var(--border);
 }
+.section-inner {
+    width: 100%;
+    min-width: 0;
+    padding: 32px clamp(20px, 4vw, 64px);
+}
 .section-line {
     display: flex;
     align-items: center;
