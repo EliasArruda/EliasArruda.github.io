@@ -3,6 +3,7 @@
     font-family: Manrope, sans-serif;
     color: var(--text);
     background: var(--page);
+    --page-gutter: max(24px, 6vw);
     --page: #100e18;
     --surface: #191523;
     --surface-alt: #221e31;
@@ -126,7 +127,7 @@ textarea:focus-visible,
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 18px 28px;
+    padding: 18px var(--page-gutter);
     gap: 20px;
     background: color-mix(in srgb, var(--page) 80%, transparent);
     backdrop-filter: blur(18px);
@@ -291,7 +292,7 @@ textarea:focus-visible,
     min-height: min(930px, 100svh);
     display: flex;
     align-items: center;
-    padding: 150px max(6vw, 24px) 115px;
+    padding: 150px var(--page-gutter) 115px;
     overflow: hidden;
     isolation: isolate;
     border-bottom: 1px solid var(--border);
@@ -465,8 +466,8 @@ textarea:focus-visible,
 .hero-bottom {
     position: absolute;
     bottom: 28px;
-    left: max(6vw, 24px);
-    right: max(6vw, 24px);
+    left: var(--page-gutter);
+    right: var(--page-gutter);
     display: flex;
     justify-content: space-between;
     font-size: 10px;
@@ -482,7 +483,6 @@ textarea:focus-visible,
     max-width: none;
     width: 100%;
     margin: 0;
-    border-inline: 1px dashed var(--border);
 }
 .content-shell > section {
     padding: 0;
@@ -491,7 +491,7 @@ textarea:focus-visible,
 .section-inner {
     width: 100%;
     min-width: 0;
-    padding: 32px clamp(20px, 4vw, 64px);
+    padding: 32px var(--page-gutter);
 }
 .section-line {
     display: flex;
@@ -932,7 +932,7 @@ textarea:focus-visible,
 footer {
     display: flex;
     justify-content: space-between;
-    padding: 24px 42px;
+    padding: 24px var(--page-gutter);
     font-size: 10px;
     color: var(--muted);
 }
@@ -1002,12 +1002,8 @@ footer {
     display: none;
 }
 @media (min-width: 1700px) {
-    .hero {
-        padding-inline: calc((100vw - 1250px) / 2);
-    }
-    .hero-bottom {
-        left: calc((100vw - 1250px) / 2);
-        right: calc((100vw - 1250px) / 2);
+    :root {
+        --page-gutter: calc((100vw - 1250px) / 2);
     }
 }
 @media (max-width: 950px) {
@@ -1018,7 +1014,7 @@ footer {
         display: none;
     }
     .topbar {
-        padding: 14px 20px;
+        padding: 14px var(--page-gutter);
     }
     .topbar-right {
         gap: 10px;
@@ -1056,15 +1052,18 @@ footer {
     }
 }
 @media (max-width: 650px) {
+    :root {
+        --page-gutter: 24px;
+    }
     .topbar {
-        padding: 12px 14px;
+        padding: 12px var(--page-gutter);
         flex-wrap: wrap;
         gap: 10px;
     }
     .brand {
         position: absolute;
         top: 22px;
-        left: 18px;
+        left: var(--page-gutter);
     }
     .topbar-right {
         width: 100%;
@@ -1095,7 +1094,7 @@ footer {
         right: -40px;
     }
     .hero {
-        padding: 165px 25px 90px;
+        padding: 165px var(--page-gutter) 90px;
         min-height: 830px;
         align-items: start;
     }
@@ -1143,8 +1142,8 @@ footer {
         margin-top: 23px;
     }
     .hero-bottom {
-        left: 25px;
-        right: 25px;
+        left: var(--page-gutter);
+        right: var(--page-gutter);
         font-size: 8px;
         gap: 12px;
         bottom: 25px;
@@ -1284,7 +1283,7 @@ footer {
         font-size: 10px;
     }
     footer {
-        padding: 22px 18px;
+        padding: 22px var(--page-gutter);
         font-size: 9px;
     }
 }
@@ -1309,4 +1308,19 @@ footer {
 }
 :root[data-theme="light"] .hero h1 > span {
     background-image: linear-gradient(110deg, #6651b5, #8742a7);
+}
+
+.project {
+    display: grid;
+    grid-template-rows: auto auto 1fr auto auto;
+    min-width: 0;
+}
+.project .text-link {
+    justify-self: start;
+}
+.me-copy p {
+    max-width: 75ch;
+}
+.contact-grid > * {
+    min-width: 0;
 }
