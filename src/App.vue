@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 import { usePortfolioMotion } from "./usePortfolioMotion";
 usePortfolioMotion();
 import { useTheme } from "./useTheme";
@@ -31,6 +31,9 @@ import {
     ExternalLink,
     Copy,
     CheckCheck,
+    Sparkles,
+    Pause,
+    Play,
     Sun,
     Moon,
 } from "@lucide/vue";
@@ -43,6 +46,59 @@ import {
     siPostgresql,
     siGit,
 } from "simple-icons";
+import SkillOrb from "./components/SkillOrb.vue";
+import GithubActivity from "./components/GithubActivity.vue";
+const motionPaused = ref(false);
+const activeSection = ref("inicio");
+const navMore = ref<HTMLDetailsElement | null>(null);
+const typed = ref("");
+const typingPhrase = computed(() =>
+    en.value ? "Interfaces, APIs & web applications" : "Interfaces, APIs e aplicações web",
+);
+let motionCleanup = () => {};
+onMounted(() => {
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+    let index = 0,
+        backward = false,
+        hold = 0;
+    const timer = setInterval(() => {
+        if (reduced.matches || motionPaused.value) {
+            typed.value = typingPhrase.value;
+            return;
+        }
+        if (document.hidden) return;
+        if (hold > 0) {
+            hold--;
+            return;
+        }
+        index += backward ? -1 : 1;
+        index = Math.max(0, Math.min(index, typingPhrase.value.length));
+        typed.value = typingPhrase.value.slice(0, index);
+        if (index === typingPhrase.value.length) {
+            backward = true;
+            hold = 32;
+        } else if (index === 0) {
+            backward = false;
+            hold = 5;
+        }
+    }, 75);
+    const observer = new IntersectionObserver(
+        (entries) => {
+            for (const entry of entries)
+                if (entry.isIntersecting) activeSection.value = entry.target.id;
+        },
+        { rootMargin: "-15% 0px -60% 0px" },
+    );
+    for (const id of ["inicio", "sobre", "projeto", "tech-stack", "contato"]) {
+        const el = document.getElementById(id);
+        if (el) observer.observe(el);
+    }
+    motionCleanup = () => {
+        clearInterval(timer);
+        observer.disconnect();
+    };
+});
+onUnmounted(() => motionCleanup());
 const techs = [siVuedotjs, siTypescript, siGo, siDotnet, siPostgresql, siGit];
 const copied = ref(false);
 const copyEmail = async () => {
@@ -470,292 +526,402 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="cursor-trail" aria-hidden="true"><span v-for="dot in 1" :key="dot"></span></div>
-    <div class="scroll-progress" aria-hidden="true"></div>
-    <a class="skip-link" href="#conteudo">{{ copy.skip }}</a>
-    <main id="conteudo">
-        <section id="inicio" class="hero">
-            <a
-                class="repo-ribbon"
-                href="https://github.com/EliasArruda"
-                target="_blank"
-                rel="noopener noreferrer"
-                >✦ {{ en ? "Explore my GitHub" : "Meu GitHub" }}</a
+    <div :class="['portfolio-app', { 'motion-paused': motionPaused }]">
+        <div class="cursor-trail" aria-hidden="true"><span></span></div>
+        <div class="scroll-progress" aria-hidden="true"></div>
+        <a class="skip-link" href="#conteudo">{{ copy.skip }}</a>
+        <header class="topbar">
+            <a class="brand" href="#inicio" :aria-label="copy.homeLabel"
+                ><strong>EA</strong><span class="brand-divider"></span
+                ><span
+                    >{{ en ? "WEB DEVELOPER" : "DESENVOLVEDOR WEB"
+                    }}<small
+                        ><i></i>{{ en ? "Open to new projects" : "Aberto a novos projetos" }}</small
+                    ></span
+                ></a
             >
-            <button
-                class="theme-toggle"
-                @click="toggleTheme"
-                :aria-label="
-                    en
-                        ? theme === 'dark'
-                            ? 'Switch to light mode'
-                            : 'Switch to dark mode'
-                        : theme === 'dark'
-                          ? 'Ativar modo claro'
-                          : 'Ativar modo escuro'
-                "
-            >
-                <Sun v-if="theme === 'dark'" :size="19" /><Moon v-else :size="19" /><span>{{
-                    en
-                        ? theme === "dark"
-                            ? "Light"
-                            : "Night"
-                        : theme === "dark"
-                          ? "Claro"
-                          : "Escuro"
-                }}</span>
-            </button>
-            <details ref="languageMenu" class="language-switcher">
-                <summary>{{ en ? "EN" : "PT" }}<ChevronDown :size="13" /></summary>
-                <div class="language-options">
-                    <button @click="setLanguage('pt')" :aria-pressed="!en">Português</button
-                    ><button @click="setLanguage('en')" :aria-pressed="en">English</button>
+            <div class="topbar-right">
+                <nav :aria-label="copy.navLabel" class="pill-nav">
+                    <a
+                        href="#inicio"
+                        :aria-current="activeSection === 'inicio' ? 'location' : undefined"
+                        >Home</a
+                    ><a
+                        href="#sobre"
+                        :aria-current="activeSection === 'sobre' ? 'location' : undefined"
+                        >{{ en ? "About" : "Sobre" }}</a
+                    ><a
+                        href="#projeto"
+                        :aria-current="activeSection === 'projeto' ? 'location' : undefined"
+                        >{{ en ? "Projects" : "Projetos" }}</a
+                    >
+                    <details ref="navMore" class="nav-more">
+                        <summary>{{ en ? "More" : "Mais" }}<ChevronDown :size="12" /></summary>
+                        <div class="nav-dropdown">
+                            <a href="#tech-stack" @click="navMore && (navMore.open = false)"
+                                >Stack & skills</a
+                            ><a href="#github-heading" @click="navMore && (navMore.open = false)"
+                                >GitHub Activity</a
+                            ><a href="#servicos" @click="navMore && (navMore.open = false)">{{
+                                en ? "Services" : "Serviços"
+                            }}</a>
+                        </div>
+                    </details>
+                    <a href="#contato" class="nav-contact">{{
+                        en ? "Let’s talk" : "Vamos conversar"
+                    }}</a>
+                </nav>
+                <div class="top-controls">
+                    <button
+                        class="theme-toggle"
+                        @click="toggleTheme"
+                        :aria-label="
+                            en
+                                ? theme === 'dark'
+                                    ? 'Switch to light mode'
+                                    : 'Switch to dark mode'
+                                : theme === 'dark'
+                                  ? 'Ativar modo claro'
+                                  : 'Ativar modo escuro'
+                        "
+                    >
+                        <Sun v-if="theme === 'dark'" :size="17" /><Moon v-else :size="17" />
+                    </button>
+                    <details ref="languageMenu" class="language-switcher">
+                        <summary>{{ en ? "EN" : "PT" }}<ChevronDown :size="11" /></summary>
+                        <div class="language-options">
+                            <button @click="setLanguage('pt')" :aria-pressed="!en">Português</button
+                            ><button @click="setLanguage('en')" :aria-pressed="en">English</button>
+                        </div>
+                    </details>
                 </div>
-            </details>
-            <a class="float-link about-link" href="#sobre">{{ en ? "About Me" : "Sobre mim" }}</a>
-            <div class="hero-center">
-                <p>{{ en ? "Hi, I am" : "Olá, eu sou" }}</p>
-                <h1>ELIAS ARRUDA</h1>
-                <p>{{ en ? "Web Developer" : "Desenvolvedor Web" }}</p>
             </div>
-            <a class="float-link tech-link" href="#tech-stack">Tech</a>
-            <div class="socials">
-                <a
-                    href="https://github.com/EliasArruda"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="GitHub"
-                    ><svg viewBox="0 0 24 24"><path :d="siGithub.path" /></svg></a
-                ><a href="#projeto" :aria-label="en ? 'Projects' : 'Projetos'"
-                    ><FolderOpen :size="30" /></a
-                ><a href="#contato" :aria-label="en ? 'Contact' : 'Contato'"><Mail :size="30" /></a>
-            </div>
-        </section>
-        <section id="sobre" class="split-section about-section">
-            <h2 class="overlap-title">
-                <span>{{ en ? "ABOUT" : "SOBRE" }}</span
-                ><span>{{ en ? "ME" : "MIM" }}</span>
-            </h2>
-            <div class="about-content">
-                <div class="bio">
-                    <p>
+        </header>
+        <main id="conteudo">
+            <section id="inicio" class="hero">
+                <div class="hero-lights" aria-hidden="true"><i></i><i></i><i></i></div>
+                <div class="hero-content">
+                    <span class="hero-badge"
+                        ><Sparkles :size="16" />{{
+                            en ? "Ready to build your next idea" : "Pronto para sua próxima ideia"
+                        }}</span
+                    >
+                    <p class="hero-name">
+                        {{ en ? "Hi, I’m Elias Arruda" : "Olá, eu sou Elias Arruda" }}
+                    </p>
+                    <h1>
+                        {{ en ? "Full Stack" : "Desenvolvedor" }}<br /><span>{{
+                            en ? "Developer" : "Full Stack"
+                        }}</span>
+                    </h1>
+                    <div class="typing-line">
+                        <span class="sr-only">{{ typingPhrase }}</span
+                        ><span aria-hidden="true">{{ typed }}<i></i></span>
+                    </div>
+                    <p class="hero-description">
                         {{
                             en
-                                ? "Hi, I’m Elias Arruda, a web developer."
-                                : "Olá, sou Elias Arruda, desenvolvedor web."
+                                ? "Web experiences built with thoughtful interfaces, solid foundations and attention to every detail."
+                                : "Experiências web com interfaces bem cuidadas, uma base sólida e atenção em cada detalhe."
                         }}
                     </p>
-                    <p>{{ extra.aboutBody }}</p>
-                    <p>{{ extra.aboutSecond }}</p>
+                    <div class="hero-tags">
+                        <span>Vue</span><span>TypeScript</span><span>.NET</span
+                        ><span>PostgreSQL</span>
+                    </div>
+                    <div class="hero-actions">
+                        <a href="#projeto" class="button"
+                            >{{ en ? "Projects" : "Projetos" }}<ArrowUpRight :size="17" /></a
+                        ><a href="#contato" class="button button-secondary"
+                            >{{ en ? "Contact" : "Contato" }}<Mail :size="17"
+                        /></a>
+                    </div>
+                    <div class="hero-socials">
+                        <a
+                            href="https://github.com/EliasArruda"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="GitHub"
+                            ><svg viewBox="0 0 24 24"><path :d="siGithub.path" /></svg></a
+                        ><a href="mailto:eliaspessoal06@gmail.com" aria-label="E-mail"
+                            ><Mail :size="20" /></a
+                        ><a
+                            href="#tech-stack"
+                            :aria-label="en ? 'My technologies' : 'Minhas tecnologias'"
+                            ><Code2 :size="20"
+                        /></a>
+                    </div>
                 </div>
-                <div id="projeto" class="timeline-group">
-                    <h3>{{ en ? "PROJECTS" : "PROJETOS" }}</h3>
-                    <article class="timeline-entry">
-                        <h4>VeyraScreen</h4>
-                        <p class="entry-label">.NET · BLAZOR · WEBRTC</p>
-                        <p>{{ extra.veyraDesc }}</p>
-                        <div class="entry-links">
+                <div class="hero-bottom">
+                    <span
+                        ><MapPin :size="14" />{{
+                            en
+                                ? "Based in Brazil · Working remotely"
+                                : "Brasil · Atendimento remoto"
+                        }}</span
+                    ><a href="#sobre">{{ en ? "Explore" : "Explore" }}<ArrowRight :size="15" /></a>
+                </div>
+            </section>
+            <div class="content-shell">
+                <section id="sobre" class="me-section">
+                    <div class="section-line">
+                        <div>
+                            <p class="section-kicker">{{ en ? "About" : "Sobre" }}</p>
+                            <h2>Me<span>.</span></h2>
+                        </div>
+                        <span class="small-note">{{
+                            en ? "The person behind the code" : "A pessoa por trás do código"
+                        }}</span>
+                    </div>
+                    <div class="me-grid">
+                        <div class="me-monogram" aria-hidden="true">
+                            <span>elias<br />arruda<span class="accent">.</span></span
+                            ><Code2 :size="28" /><small>INDEPENDENT DEVELOPER</small>
+                        </div>
+                        <div class="me-copy">
+                            <h3>Elias Arruda</h3>
+                            <p>{{ extra.aboutBody }}</p>
+                            <p>{{ extra.aboutSecond }}</p>
+                            <p class="muted">
+                                {{
+                                    en
+                                        ? "From the first idea to deployment: websites, landing pages and custom applications."
+                                        : "Da primeira ideia à publicação: sites, landing pages e aplicações sob medida."
+                                }}
+                            </p>
+                            <p class="skills-label">Skills</p>
+                            <div class="inline-skills">
+                                <span v-for="tech in techs" :key="tech.slug" :title="tech.title"
+                                    ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path :d="tech.path" /></svg
+                                    ><span class="sr-only">{{ tech.title }}</span></span
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <GithubActivity :en="en" />
+                <section id="tech-stack" class="stack-section">
+                    <p class="section-kicker">{{ en ? "MY SKILLSET" : "MINHAS TECNOLOGIAS" }}</p>
+                    <h2>
+                        {{ en ? "The magic" : "O que faz" }}
+                        <span>{{ en ? "behind." : "acontecer." }}</span>
+                    </h2>
+                    <SkillOrb :paused="motionPaused" />
+                    <div class="stack-chips">
+                        <span v-for="tech in techs" :key="tech.slug"
+                            ><svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path :d="tech.path" /></svg
+                            >{{ tech.title }}</span
+                        ><span><Code2 :size="18" />HTML & CSS</span
+                        ><span><Radio :size="18" />WebRTC</span
+                        ><span><Server :size="18" />APIs REST</span>
+                    </div>
+                    <p class="stack-caption">
+                        {{
+                            en
+                                ? "Interfaces, services and data. Connected."
+                                : "Interfaces, serviços e dados. Conectados."
+                        }}
+                    </p>
+                    <button
+                        class="motion-toggle"
+                        @click="motionPaused = !motionPaused"
+                        :aria-pressed="motionPaused"
+                    >
+                        <Play v-if="motionPaused" :size="14" /><Pause v-else :size="14" />{{
+                            en
+                                ? motionPaused
+                                    ? "Resume animations"
+                                    : "Pause animations"
+                                : motionPaused
+                                  ? "Retomar animações"
+                                  : "Pausar animações"
+                        }}
+                    </button>
+                </section>
+                <section id="projeto" class="projects-section">
+                    <div class="section-line">
+                        <div>
+                            <p class="section-kicker">
+                                {{ en ? "SELECTED WORK" : "TRABALHOS SELECIONADOS" }}
+                            </p>
+                            <h2>{{ en ? "Built by me" : "Feito por mim" }}<span>.</span></h2>
+                        </div>
+                        <a
+                            href="https://github.com/EliasArruda?tab=repositories"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >GitHub<ArrowUpRight :size="16"
+                        /></a>
+                    </div>
+                    <div class="projects-grid">
+                        <article class="project">
                             <a
+                                class="project-image"
                                 href="https://veyrascreen.onrender.com/"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                >{{ en ? "Open application" : "Ver aplicação"
-                                }}<ArrowUpRight :size="16" /></a
-                            ><a
+                                :aria-label="extra.demo"
+                                ><img
+                                    src="/veyra-preview.jpg"
+                                    :alt="extra.preview"
+                                    width="1440"
+                                    height="1000"
+                                    loading="eager" /><span><ArrowUpRight :size="23" /></span
+                            ></a>
+                            <h3>VeyraScreen</h3>
+                            <p>{{ extra.veyraDesc }}</p>
+                            <div class="small-tags">
+                                <span>Blazor</span><span>.NET</span><span>WebRTC</span>
+                            </div>
+                            <a
+                                class="text-link"
                                 href="https://github.com/EliasArruda/VeyraScreen"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                >{{ en ? "Source code" : "Código" }}<Code2 :size="16"
+                                ><Code2 :size="16" />{{ extra.code }}<ArrowUpRight :size="14"
+                            /></a>
+                        </article>
+                        <article class="project">
+                            <a
+                                class="project-image portfolio-preview"
+                                href="https://github.com/EliasArruda/EliasArruda.github.io"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                :aria-label="en ? 'Portfolio source code' : 'Código do portfólio'"
+                                ><small>EA / PORTFOLIO</small
+                                ><strong>Ideas into<br /><em>experiences.</em></strong
+                                ><span><ArrowUpRight :size="23" /></span
+                            ></a>
+                            <h3>{{ en ? "Personal portfolio" : "Portfólio pessoal" }}</h3>
+                            <p>{{ extra.portfolioDesc }}</p>
+                            <div class="small-tags">
+                                <span>Vue</span><span>TypeScript</span><span>CSS</span>
+                            </div>
+                            <a
+                                class="text-link"
+                                href="https://github.com/EliasArruda/EliasArruda.github.io"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                ><Code2 :size="16" />{{ extra.code }}<ArrowUpRight :size="14"
+                            /></a>
+                        </article>
+                    </div>
+                </section>
+                <section id="servicos" class="services-section">
+                    <div class="section-line">
+                        <h2>{{ en ? "Let’s build" : "Vamos construir" }}<span>.</span></h2>
+                    </div>
+                    <div class="services-grid">
+                        <article v-for="(service, index) in copy.services" :key="service.title">
+                            <component :is="[Globe2, PanelsTopLeft, AppWindow][index]" :size="25" />
+                            <h3>{{ service.title }}</h3>
+                            <p>{{ service.description }}</p>
+                        </article>
+                    </div>
+                </section>
+                <section id="contato" class="contact-section">
+                    <div class="section-line">
+                        <div>
+                            <p class="section-kicker">
+                                {{ en ? "HAVE SOMETHING IN MIND?" : "TEM UMA IDEIA EM MENTE?" }}
+                            </p>
+                            <h2>{{ en ? "Let’s talk" : "Vamos conversar" }}<span>.</span></h2>
+                        </div>
+                    </div>
+                    <div class="contact-grid">
+                        <div>
+                            <h3>{{ en ? "A direct conversation." : "Uma conversa direta." }}</h3>
+                            <p>
+                                {{
+                                    en
+                                        ? "Tell me what you want to build. We will define the scope, timeline and next steps together."
+                                        : "Me conte o que você quer construir. Definimos juntos o escopo, o prazo e os próximos passos."
+                                }}
+                            </p>
+                            <a class="email-link" href="mailto:eliaspessoal06@gmail.com"
+                                ><Mail :size="17" />eliaspessoal06@gmail.com<ArrowUpRight
+                                    :size="15"
                             /></a>
                         </div>
-                    </article>
-                    <article class="timeline-entry">
-                        <h4>{{ en ? "Personal portfolio" : "Portfólio pessoal" }}</h4>
-                        <p class="entry-label">VUE · TYPESCRIPT</p>
-                        <p>{{ extra.portfolioDesc }}</p>
-                        <a
-                            class="entry-links"
-                            href="https://github.com/EliasArruda/EliasArruda.github.io"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            >{{ en ? "Explore the code" : "Conheça o código"
-                            }}<ArrowUpRight :size="16"
-                        /></a>
-                    </article>
-                </div>
-                <div id="servicos" class="timeline-group">
-                    <h3>{{ en ? "SERVICES" : "SERVIÇOS" }}</h3>
-                    <article class="timeline-entry">
-                        <h4>{{ en ? "Web development" : "Desenvolvimento web" }}</h4>
-                        <p class="entry-label">
-                            {{
-                                en
-                                    ? "WEBSITES · LANDING PAGES · APPLICATIONS"
-                                    : "SITES · LANDING PAGES · APLICAÇÕES"
-                            }}
-                        </p>
-                        <ul>
-                            <li v-for="service in copy.services" :key="service.title">
-                                {{ service.description }}
-                            </li>
-                        </ul>
-                    </article>
-                </div>
-                <div class="timeline-group">
-                    <h3>{{ en ? "HOW I WORK" : "COMO TRABALHO" }}</h3>
-                    <article class="timeline-entry">
-                        <h4>
-                            {{
-                                en
-                                    ? "From the first conversation to delivery"
-                                    : "Da primeira conversa à entrega"
-                            }}
-                        </h4>
-                        <p class="entry-label">
-                            {{
-                                en
-                                    ? "CLEAR SCOPE · DIRECT COMMUNICATION"
-                                    : "ESCOPO CLARO · CONTATO DIRETO"
-                            }}
-                        </p>
-                        <ul>
-                            <li v-for="step in extra.steps" :key="step[0]">{{ step[1] }}</li>
-                        </ul>
-                    </article>
-                </div>
+                        <form class="contact-form" @submit.prevent="submitContact">
+                            <div class="form-field">
+                                <label for="contact-name">{{ copy.name }}</label
+                                ><input
+                                    id="contact-name"
+                                    name="name"
+                                    :placeholder="copy.namePlaceholder"
+                                    autocomplete="name"
+                                    maxlength="120"
+                                    required
+                                />
+                            </div>
+                            <div class="form-field">
+                                <label for="contact-email">{{ copy.email }}</label
+                                ><input
+                                    id="contact-email"
+                                    name="email"
+                                    type="email"
+                                    :placeholder="copy.emailPlaceholder"
+                                    autocomplete="email"
+                                    maxlength="254"
+                                    required
+                                />
+                            </div>
+                            <div class="form-field form-message">
+                                <label for="contact-message">{{ copy.message }}</label
+                                ><textarea
+                                    id="contact-message"
+                                    name="message"
+                                    :placeholder="copy.messagePlaceholder"
+                                    rows="4"
+                                    maxlength="5000"
+                                    required
+                                ></textarea>
+                            </div>
+                            <input
+                                class="form-honeypot"
+                                name="_honey"
+                                tabindex="-1"
+                                autocomplete="off"
+                                aria-hidden="true"
+                            /><input type="hidden" name="_subject" :value="extra.subject" />
+                            <p class="privacy-note">{{ extra.privacy }}</p>
+                            <button
+                                class="button button-primary form-submit"
+                                :disabled="contactStatus === 'submitting'"
+                            >
+                                <Mail :size="18" />{{
+                                    contactStatus === "submitting" ? copy.sending : copy.sendEmail
+                                }}<ArrowUpRight :size="18" />
+                            </button>
+                            <p v-if="contactStatus === 'success'" class="form-status" role="status">
+                                {{ copy.sent }}
+                            </p>
+                            <p
+                                v-if="contactStatus === 'error'"
+                                class="form-status error"
+                                role="alert"
+                            >
+                                {{ copy.sendError }}
+                                <a href="mailto:eliaspessoal06@gmail.com">{{ extra.email }}</a>
+                            </p>
+                            <p
+                                v-if="contactStatus === 'rate-limited'"
+                                class="form-status error"
+                                role="alert"
+                            >
+                                {{ copy.rateLimited }}
+                            </p>
+                        </form>
+                    </div>
+                </section>
+                <footer>
+                    <span>© {{ new Date().getFullYear() }} Elias Arruda</span
+                    ><a href="#inicio">{{ copy.backTop }} ↑</a>
+                </footer>
             </div>
-        </section>
-        <section id="tech-stack" class="split-section tech-section">
-            <div class="tech-content">
-                <div class="tech-group">
-                    <p>{{ en ? "Core Stack I Work With" : "Tecnologias com que trabalho" }}</p>
-                    <div class="tech-icons">
-                        <div
-                            v-for="tech in techs.slice(0, 4)"
-                            :key="tech.slug"
-                            class="tech-icon"
-                            tabindex="0"
-                            :aria-label="tech.title"
-                        >
-                            <svg viewBox="0 0 24 24" aria-hidden="true"><path :d="tech.path" /></svg
-                            ><span class="tooltip">{{ tech.title }}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="tech-group">
-                    <p>{{ en ? "Interfaces & styling" : "Interfaces e estilos" }}</p>
-                    <div class="tech-icons">
-                        <div class="tech-icon" tabindex="0" aria-label="Design responsivo">
-                            <Smartphone /><span class="tooltip">{{
-                                en ? "Responsive UI" : "Interface responsiva"
-                            }}</span>
-                        </div>
-                        <div class="tech-icon" tabindex="0" aria-label="CSS">
-                            <PanelsTopLeft /><span class="tooltip">CSS</span>
-                        </div>
-                        <div class="tech-icon" tabindex="0" aria-label="HTML">
-                            <Code2 /><span class="tooltip">HTML</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="tech-group">
-                    <p>{{ en ? "Data & version control" : "Dados e versionamento" }}</p>
-                    <div class="tech-icons">
-                        <div
-                            v-for="tech in techs.slice(4)"
-                            :key="tech.slug"
-                            class="tech-icon"
-                            tabindex="0"
-                            :aria-label="tech.title"
-                        >
-                            <svg viewBox="0 0 24 24" aria-hidden="true"><path :d="tech.path" /></svg
-                            ><span class="tooltip">{{ tech.title }}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <h2 class="overlap-title"><span>TECH</span><span>SET</span></h2>
-        </section>
-        <section id="contato" class="contact-section">
-            <details class="contact-disclosure">
-                <summary>{{ en ? "Let’s talk" : "Vamos conversar" }}<Mail :size="25" /></summary>
-                <div class="contact-inner">
-                    <p>{{ en ? "Tell me about your project." : "Me conte sobre seu projeto." }}</p>
-                    <a class="email-link" href="mailto:eliaspessoal06@gmail.com"
-                        >eliaspessoal06@gmail.com<ArrowUpRight :size="17"
-                    /></a>
-                    <form class="contact-form" @submit.prevent="submitContact">
-                        <div class="form-field">
-                            <label for="contact-name">{{ copy.name }}</label
-                            ><input
-                                id="contact-name"
-                                name="name"
-                                :placeholder="copy.namePlaceholder"
-                                autocomplete="name"
-                                maxlength="120"
-                                required
-                            />
-                        </div>
-                        <div class="form-field">
-                            <label for="contact-email">{{ copy.email }}</label
-                            ><input
-                                id="contact-email"
-                                name="email"
-                                type="email"
-                                :placeholder="copy.emailPlaceholder"
-                                autocomplete="email"
-                                maxlength="254"
-                                required
-                            />
-                        </div>
-                        <div class="form-field form-message">
-                            <label for="contact-message">{{ copy.message }}</label
-                            ><textarea
-                                id="contact-message"
-                                name="message"
-                                :placeholder="copy.messagePlaceholder"
-                                rows="4"
-                                maxlength="5000"
-                                required
-                            ></textarea>
-                        </div>
-                        <input
-                            class="form-honeypot"
-                            name="_honey"
-                            tabindex="-1"
-                            autocomplete="off"
-                            aria-hidden="true"
-                        /><input type="hidden" name="_subject" :value="extra.subject" />
-                        <p class="privacy-note">{{ extra.privacy }}</p>
-                        <button
-                            class="button button-primary form-submit"
-                            :disabled="contactStatus === 'submitting'"
-                        >
-                            <Mail :size="18" />{{
-                                contactStatus === "submitting" ? copy.sending : copy.sendEmail
-                            }}<ArrowUpRight :size="18" />
-                        </button>
-                        <p v-if="contactStatus === 'success'" class="form-status" role="status">
-                            {{ copy.sent }}
-                        </p>
-                        <p v-if="contactStatus === 'error'" class="form-status error" role="alert">
-                            {{ copy.sendError }}
-                            <a href="mailto:eliaspessoal06@gmail.com">{{ extra.email }}</a>
-                        </p>
-                        <p
-                            v-if="contactStatus === 'rate-limited'"
-                            class="form-status error"
-                            role="alert"
-                        >
-                            {{ copy.rateLimited }}
-                        </p>
-                    </form>
-                </div>
-            </details>
-        </section>
-        <footer>
-            <span>© {{ new Date().getFullYear() }} Elias Arruda</span
-            ><a href="#inicio">{{ copy.backTop }} ↑</a>
-        </footer>
-    </main>
+        </main>
+    </div>
 </template>
