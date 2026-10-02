@@ -113,6 +113,31 @@ const copyEmail = async () => {
 const language = ref<"pt" | "en">("pt");
 const menuOpen = ref(false);
 const languageMenu = ref<HTMLDetailsElement | null>(null);
+const closeDropdownsOutside = (event: PointerEvent) => {
+    for (const menu of [navMore.value, languageMenu.value]) {
+        if (menu?.open && event.target instanceof Node && !menu.contains(event.target)) {
+            menu.open = false;
+        }
+    }
+};
+const closeDropdownsOnEscape = (event: KeyboardEvent) => {
+    if (event.key !== "Escape") return;
+    for (const menu of [navMore.value, languageMenu.value]) {
+        if (!menu?.open) continue;
+        const hadFocus = menu.contains(document.activeElement);
+        menu.open = false;
+        if (hadFocus) menu.querySelector("summary")?.focus();
+    }
+};
+onMounted(() => {
+    document.addEventListener("pointerdown", closeDropdownsOutside);
+    document.addEventListener("keydown", closeDropdownsOnEscape);
+});
+onUnmounted(() => {
+    document.removeEventListener("pointerdown", closeDropdownsOutside);
+    document.removeEventListener("keydown", closeDropdownsOnEscape);
+});
+
 const contactStatus = ref<"idle" | "submitting" | "success" | "error" | "rate-limited">("idle");
 const translations = {
     pt: {
@@ -531,15 +556,7 @@ onMounted(() => {
         <div class="scroll-progress" aria-hidden="true"></div>
         <a class="skip-link" href="#conteudo">{{ copy.skip }}</a>
         <header class="topbar">
-            <a class="brand" href="#inicio" :aria-label="copy.homeLabel"
-                ><strong>EA</strong><span class="brand-divider"></span
-                ><span
-                    >{{ en ? "WEB DEVELOPER" : "DESENVOLVEDOR WEB"
-                    }}<small
-                        ><i></i>{{ en ? "Open to new projects" : "Aberto a novos projetos" }}</small
-                    ></span
-                ></a
-            >
+            <a class="brand" href="#inicio" :aria-label="copy.homeLabel"><strong>EA</strong></a>
             <div class="topbar-right">
                 <nav :aria-label="copy.navLabel" class="pill-nav">
                     <a
@@ -674,11 +691,6 @@ onMounted(() => {
                                 en ? "The person behind the code" : "A pessoa por trás do código"
                             }}</span>
                         </div>
-                        <div class="me-grid">
-                            <div class="me-monogram" aria-hidden="true">
-                                <span>elias<br />arruda<span class="accent">.</span></span
-                                ><Code2 :size="28" /><small>INDEPENDENT DEVELOPER</small>
-                            </div>
                             <div class="me-copy">
                                 <h3>Elias Arruda</h3>
                                 <p>{{ extra.aboutBody }}</p>
@@ -699,7 +711,6 @@ onMounted(() => {
                                     >
                                 </div>
                             </div>
-                        </div>
                     </div>
                 </section>
                 <GithubActivity :en="en" />

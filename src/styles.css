@@ -133,38 +133,19 @@ textarea:focus-visible,
     backdrop-filter: blur(18px);
 }
 .brand {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    white-space: nowrap;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 42px;
+    height: 36px;
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border));
+    border-radius: 6px;
+    background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+    color: var(--accent);
 }
 .brand strong {
-    font-size: 14px;
-}
-.brand-divider {
-    height: 25px;
-    width: 1px;
-    background: var(--border);
-}
-.brand > span:last-child {
-    font-size: 9px;
-    letter-spacing: 0.16em;
-    line-height: 1.4;
-}
-.brand small {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    color: var(--secondary);
-    font-size: 9px;
-    letter-spacing: 0;
-    margin-top: 4px;
-}
-.brand small i {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--secondary);
+    font-size: 15px;
+    letter-spacing: -0.04em;
 }
 .topbar-right {
     display: flex;
@@ -523,38 +504,8 @@ textarea:focus-visible,
     font-size: 11px;
     color: var(--muted);
 }
-.me-grid {
-    display: grid;
-    grid-template-columns: 220px 1fr;
-    gap: 32px;
-}
-.me-monogram {
-    position: relative;
-    min-height: 300px;
-    padding: 28px;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    background: linear-gradient(140deg, var(--surface-alt), var(--surface));
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-.me-monogram > span {
-    font-size: 43px;
-    font-weight: 800;
-    letter-spacing: -0.055em;
-    line-height: 1.08;
-}
 .accent {
     color: var(--accent);
-}
-.me-monogram > svg {
-    color: var(--accent);
-}
-.me-monogram > small {
-    font-size: 8px;
-    letter-spacing: 0.12em;
-    color: var(--muted);
 }
 .me-copy h3 {
     font-size: 30px;
@@ -1007,12 +958,6 @@ footer {
     }
 }
 @media (max-width: 950px) {
-    .brand > span:last-child {
-        display: none;
-    }
-    .brand-divider {
-        display: none;
-    }
     .topbar {
         padding: 14px var(--page-gutter);
     }
@@ -1037,16 +982,6 @@ footer {
         grid-template-columns: 1fr;
         gap: 30px;
     }
-    .me-grid {
-        grid-template-columns: 170px 1fr;
-        gap: 24px;
-    }
-    .me-monogram {
-        padding: 23px;
-    }
-    .me-monogram > span {
-        font-size: 36px;
-    }
     .hero-content {
         max-width: 630px;
     }
@@ -1062,7 +997,7 @@ footer {
     }
     .brand {
         position: absolute;
-        top: 22px;
+        top: 10px;
         left: var(--page-gutter);
     }
     .topbar-right {
@@ -1182,24 +1117,6 @@ footer {
         max-width: 125px;
         font-size: 10px;
         text-align: right;
-    }
-    .me-grid {
-        grid-template-columns: 1fr;
-        gap: 24px;
-    }
-    .me-monogram {
-        min-height: 150px;
-        display: grid;
-        grid-template-columns: 1fr 45px;
-        align-items: center;
-        padding: 25px;
-    }
-    .me-monogram > span {
-        font-size: 38px;
-    }
-    .me-monogram > small {
-        grid-column: 1/-1;
-        margin-top: 15px;
     }
     .me-copy h3 {
         font-size: 27px;
