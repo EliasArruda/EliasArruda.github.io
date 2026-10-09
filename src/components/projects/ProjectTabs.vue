@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PanelsTopLeft, FolderOpen } from '@lucide/vue';
+import { PanelsTopLeft, BriefcaseBusiness } from '@lucide/vue';
 import type { ProjectCategory } from '../../data/projects';
 defineProps<{ modelValue: ProjectCategory; language: 'pt' | 'en' }>();
 const emit = defineEmits<{ 'update:modelValue': [value: ProjectCategory] }>();
@@ -17,6 +17,6 @@ function navigate(event: KeyboardEvent, index: number) {
 </script>
 <template>
     <div class="project-tabs" role="tablist" :aria-label="language === 'pt' ? 'Categorias de projetos' : 'Project categories'">
-        <button v-for="(category, index) in categories" :id="`tab-${category}`" :key="category" role="tab" type="button" :aria-selected="modelValue === category" :aria-controls="`panel-${category}`" :tabindex="modelValue === category ? 0 : -1" @click="emit('update:modelValue', category)" @keydown="navigate($event, index)"><component :is="category === 'landing-page' ? PanelsTopLeft : FolderOpen" :size="16" aria-hidden="true" />{{ category === 'landing-page' ? 'Landing Pages' : language === 'pt' ? 'Projetos Profissionais' : 'Professional Projects' }}</button>
+        <button v-for="(category, index) in categories" :id="`tab-${category}`" :key="category" role="tab" type="button" :aria-selected="modelValue === category" :aria-controls="`panel-${category}`" :tabindex="modelValue === category ? 0 : -1" @click="emit('update:modelValue', category)" @keydown="navigate($event, index)"><component :is="category === 'landing-page' ? PanelsTopLeft : BriefcaseBusiness" :size="16" aria-hidden="true" />{{ category === 'landing-page' ? 'Landing Pages' : language === 'pt' ? 'Projetos Profissionais' : 'Professional Projects' }}</button>
     </div>
 </template>

@@ -2,7 +2,7 @@
 
 Portfólio Vue 3 + TypeScript + Vite com apresentação, **Built by me**, serviços e contato. O layout original foi preservado, com Feitos por mim imediatamente abaixo de Me. Idiomas português/inglês, temas claro/escuro e tecnologias representadas por ícones acessíveis.
 
-A vitrine preserva os três projetos profissionais (Voxen, VeyraScreen e portfólio) e reúne quatro marcas fictícias: Barber & Co, Almeida & Associados, Sapore Cucina e Paw & Care. Cada demonstração tem composição própria com PT/EN, navegação responsiva e interações locais. Formulários simulam respostas; não enviam dados nem realizam reservas.
+A vitrine preserva os dois projetos profissionais (Voxen e VeyraScreen) e reúne quatro marcas fictícias: Barber & Co, Almeida & Associados, Sapore Cucina e Paw & Care. Cada demonstração tem composição própria com PT/EN, navegação responsiva e interações locais. Formulários simulam respostas; não enviam dados nem realizam reservas.
 
 ## Executar e verificar
 

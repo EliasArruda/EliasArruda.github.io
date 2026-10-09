@@ -164,26 +164,6 @@ export const projects: PortfolioProject[] = [
         ],
         "liveUrl": "https://veyrascreen.onrender.com/",
         "repositoryUrl": "https://github.com/EliasArruda/VeyraScreen"
-    },
-    {
-        "id": "portfolio",
-        "title": {
-            "pt": "Portfólio pessoal",
-            "en": "Personal portfolio"
-        },
-        "description": {
-            "pt": "Este portfólio: um site responsivo em Vue e TypeScript, com dois idiomas, navegação acessível e formulário de contato.",
-            "en": "This portfolio: a responsive Vue and TypeScript website, with two languages, accessible navigation and a contact form."
-        },
-        "category": "professional",
-        "projectType": "personal",
-        "technologies": [
-            "Vue",
-            "TypeScript",
-            "CSS"
-        ],
-        "repositoryUrl": "https://github.com/EliasArruda/EliasArruda.github.io",
-        "artwork": "portfolio"
     }
 ];
 

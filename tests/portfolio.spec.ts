@@ -138,7 +138,8 @@ test('portfolio: four real screenshots, preserved projects, keyboard tabs and co
     }
     const landing = page.getByRole('tab', { name: 'Landing Pages' });
     await landing.focus(); await page.keyboard.press('ArrowRight');
-    await expect(page.locator('.project')).toHaveCount(3);
+    await expect(page.locator('.project')).toHaveCount(2);
+    await expect(page.getByRole('heading', { name: 'Portfólio pessoal', exact: true })).toHaveCount(0);
     await expect(page.getByRole('heading', { name: 'VeyraScreen', exact: true })).toBeVisible();
     await expect(page.locator('.project').filter({has: page.getByRole('heading', { name: 'VeyraScreen', exact: true })}).locator('.project-image')).toHaveAttribute('href', 'https://veyrascreen.onrender.com/');
     await expect(page.locator('.project img[src="/veyra-preview.jpg"]')).toHaveCount(1);
