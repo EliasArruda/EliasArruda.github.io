@@ -46,6 +46,7 @@ import {
     siPostgresql,
     siGit,
 } from "simple-icons";
+import GalaxyBackdrop from "./components/GalaxyBackdrop.vue";
 import SkillOrb from "./components/SkillOrb.vue";
 import GithubActivity from "./components/GithubActivity.vue";
 import ProjectGallery from "./components/projects/ProjectGallery.vue";
@@ -557,7 +558,7 @@ onMounted(() => {
         <div class="scroll-progress" aria-hidden="true"></div>
         <a class="skip-link" href="#conteudo">{{ copy.skip }}</a>
         <header class="topbar">
-            <a class="brand" href="#inicio" :aria-label="copy.homeLabel"><strong>EA</strong></a>
+            <a class="brand" href="#inicio" :aria-label="copy.homeLabel"><img src="/brand-mark.svg" width="40" height="40" alt="" /></a>
             <div class="topbar-right">
                 <nav :aria-label="copy.navLabel" class="pill-nav">
                     <a
@@ -644,8 +645,7 @@ onMounted(() => {
                         }}
                     </p>
                     <div class="hero-tags">
-                        <span>Vue</span><span>TypeScript</span><span>.NET</span
-                        ><span>PostgreSQL</span>
+                        <span v-for="item in [{name: 'Vue', path: siVuedotjs.path}, {name: 'TypeScript', path: siTypescript.path}, {name: '.NET', path: siDotnet.path}, {name: 'PostgreSQL', path: siPostgresql.path}]" :key="item.name"><svg viewBox="0 0 24 24" aria-hidden="true"><path :d="item.path" /></svg>{{ item.name }}</span>
                     </div>
                     <div class="hero-actions">
                         <a href="#projeto" class="button"
@@ -754,6 +754,7 @@ onMounted(() => {
                 </section>
                 <GithubActivity :en="en" />
                 <section id="tech-stack" class="stack-section">
+                    <GalaxyBackdrop :paused="motionPaused" />
                     <div class="section-inner">
                         <p class="section-kicker">
                             {{ en ? "MY SKILLSET" : "MINHAS TECNOLOGIAS" }}
@@ -836,7 +837,7 @@ onMounted(() => {
                                     }}
                                 </p>
                                 <a class="email-link" href="mailto:eliaspessoal06@gmail.com"
-                                    ><Mail :size="17" />eliaspessoal06@gmail.com<ArrowUpRight
+                                    ><Mail :size="17" />{{ en ? "Send an email" : "Enviar um e-mail" }}<ArrowUpRight
                                         :size="15"
                                 /></a>
                             </div>

@@ -1314,3 +1314,59 @@ button.text-link { background: none; border: 0; padding: 0; }
 @media (prefers-reduced-motion: no-preference) {
     .project-tabs button, .preview-header button { transition: color 160ms ease-out, background-color 160ms ease-out, border-color 160ms ease-out; }
 }
+
+/* Focused refinements: preserve layout and typography. */
+.brand { padding: 0; border: 0; background: transparent; }
+.brand img { display:block; width:40px; height:40px; border-radius:10px; }
+.hero-tags > span { display:inline-flex; align-items:center; gap:7px; }
+.hero-tags svg { width:15px; height:15px; fill:currentColor; flex-shrink:0; }
+.project-technologies { display:flex; align-items:center; gap:10px; list-style:none; margin:14px 0; padding:0; flex-wrap:wrap; }
+.project-technologies li { display:grid; place-items:center; width:32px; height:32px; border-radius:7px; background:var(--surface); color:var(--secondary); }
+.project-technologies svg { width:20px; height:20px; fill:currentColor; }
+.project-technologies li.html { color:#f39474; }
+.project-technologies li.css, .project-technologies li.typescript { color:#80baf0; }
+.project-technologies li.javascript { color:#ead576; }
+.project-technologies li.vue { color:#75cfad; }
+.project-technologies li.dotnet { color:var(--accent); }
+:root[data-theme='light'] .project-technologies li.html { color:#ad3b1b; }
+:root[data-theme='light'] .project-technologies li.css, :root[data-theme='light'] .project-technologies li.typescript { color:#246ca6; }
+:root[data-theme='light'] .project-technologies li.javascript { color:#826500; }
+:root[data-theme='light'] .project-technologies li.vue { color:#236c64; }
+.services-grid { gap:18px; }
+.services-grid article { --service-tone:var(--accent); background:color-mix(in srgb, var(--service-tone) 9%, var(--page)); border:1px solid color-mix(in srgb, var(--service-tone) 25%, var(--border)); border-radius:14px; padding:26px; }
+.services-grid article:nth-child(2) { --service-tone:var(--secondary); }
+.services-grid article:nth-child(3) { --service-tone:var(--text-soft); }
+.services-grid article > svg { color:var(--service-tone); margin-bottom:16px; }
+.services-grid h3 { color:var(--text); }
+.services-grid p { color:var(--text-soft); }
+.stack-section { position:relative; isolation:isolate; overflow:hidden; background:var(--page); }
+.stack-section > .section-inner { position:relative; z-index:1; }
+.galaxy-backdrop { position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:0; }
+.galaxy-nebula { position:absolute; inset:-15%; background:radial-gradient(ellipse at 32% 48%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 48%),radial-gradient(ellipse at 68% 60%, color-mix(in srgb, var(--secondary) 12%, transparent), transparent 42%); animation:galaxy-drift 28s ease-in-out infinite alternate; }
+.galaxy-backdrop i { position:absolute; width:var(--size); height:var(--size); border-radius:50%; background:var(--accent); opacity:.4; animation:star-light var(--duration) ease-in-out var(--delay) infinite alternate; }
+.galaxy-backdrop i:nth-child(3n) { background:var(--secondary); }
+.galaxy-backdrop i:nth-child(5n) { background:var(--text-soft); }
+.galaxy-paused i, .galaxy-paused .galaxy-nebula { animation-play-state:paused; }
+@keyframes star-light { from { opacity:.15; transform:scale(.7); } to { opacity:.6; transform:scale(1.1); } }
+@keyframes galaxy-drift { from { transform:translate3d(-2%,0,0); } to { transform:translate3d(2%,3%,0); } }
+@media(prefers-reduced-motion:reduce) { .galaxy-backdrop i, .galaxy-nebula { animation:none; } }
+.contribution-panel { background:var(--surface); padding:28px; border:0; border-radius:14px; }
+.activity-overview { display:flex; align-items:baseline; gap:40px; margin-bottom:24px; padding-bottom:22px; border-bottom:1px solid var(--border); }
+.activity-overview > div { display:flex; align-items:baseline; gap:9px; }
+.activity-overview strong { font-size:30px; font-weight:500; color:var(--secondary); font-variant-numeric:tabular-nums; }
+.activity-overview span, .activity-overview p { color:var(--text-soft); font-size:12px; }
+.activity-overview p { margin-left:auto; }
+.calendar { gap:4px; min-width:760px; }
+.calendar-week { gap:4px; }
+.contribution-day { height:auto; aspect-ratio:1; border-radius:3px; line-height:1; font-size:0; }
+.contribution-day:hover { outline:2px solid var(--accent); outline-offset:1px; }
+.contribution-panel .level-0 { background:color-mix(in srgb, var(--text) 7%, var(--surface)); }
+.contribution-panel .level-1 { background:color-mix(in srgb, var(--secondary) 28%, var(--surface)); }
+.contribution-panel .level-2 { background:color-mix(in srgb, var(--secondary) 50%, var(--surface)); }
+.contribution-panel .level-3 { background:color-mix(in srgb, var(--secondary) 75%, var(--surface)); }
+.contribution-panel .level-4 { background:var(--secondary); }
+.month-label { font-size:10px; color:var(--text-soft); }
+.calendar-caption { padding-top:8px; color:var(--text-soft); }
+.data-date { font-size:11px; margin-top:16px; }
+@media(max-width:760px) { .activity-overview { flex-wrap:wrap; gap:10px 24px; } .activity-overview p { flex-basis:100%; margin-left:0; } .activity-overview strong { font-size:25px; } .contribution-panel { padding:20px; } .services-grid article { padding:22px; } }
+.project-technologies svg.lucide { fill:none; }

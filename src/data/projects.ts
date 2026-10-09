@@ -134,6 +134,13 @@ export const projects: PortfolioProject[] = [
     "embeddable": true
 },
     {
+        id: 'voxen', title: { pt: 'Voxen', en: 'Voxen' },
+        description: { pt: 'Player de música para Linux e Windows, com busca no YouTube e SoundCloud, biblioteca pessoal, playlists e equalizador.', en: 'A music player for Linux and Windows, with YouTube and SoundCloud search, a personal library, playlists and an equalizer.' },
+        category: 'professional', projectType: 'personal', image: '/images/projects/voxen.webp',
+        imageAlt: { pt: 'Captura do player de música Voxen, publicada no repositório do projeto', en: 'Screenshot of the Voxen music player from the project repository' },
+        technologies: ['.NET', 'Blazor'], repositoryUrl: 'https://github.com/EliasArruda/Voxen'
+    },
+    {
         "id": "veyrascreen",
         "title": {
             "pt": "VeyraScreen",

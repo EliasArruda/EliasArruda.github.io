@@ -15,4 +15,8 @@ Fotos ilustrativas, nunca apresentadas como clientes ou equipe. Sem depoimentos,
 
 ## Ordem das seções
 
-Layout original preservado. Feitos por mim fica imediatamente abaixo de Me; stack, atividade e demais elementos mantêm apresentação anterior. As demos usam português.
+Layout original preservado. Feitos por mim fica imediatamente abaixo de Me; stack, atividade e demais elementos mantêm apresentação anterior. As demos oferecem PT/EN.
+
+## Ajustes solicitados
+
+Favicon existente no cabeçalho; ícones de tecnologias nos cards e antes dos rótulos do hero. Serviços recebem fundos sutis lilás, verde e neutro, com texto legível nos dois temas. A seção de tecnologias usa estrelas e névoa lilás/verde, com movimento pausável e reduced motion. O calendário GitHub usa células limpas, escala tonal verde e resumo de contribuições/dias ativos, sem alterar os dados. O endereço de contato não aparece como texto. Voxen usa captura do README do repositório público.

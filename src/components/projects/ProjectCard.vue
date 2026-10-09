@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ArrowUpRight, Code2 } from '@lucide/vue';
+import TechnologyIcons from './TechnologyIcons.vue';
 import { previewUrl, type PortfolioProject } from '../../data/projects';
 defineProps<{ project: PortfolioProject; language: 'pt' | 'en' }>();
 defineEmits<{ explore: [project: PortfolioProject] }>();
@@ -23,7 +24,7 @@ defineEmits<{ explore: [project: PortfolioProject] }>();
         <h3>{{ project.title[language] }}</h3>
         <p>{{ project.description[language] }}</p>
         <p v-if="project.category === 'landing-page'" class="project-type">{{ project.projectType === 'client' ? (language === 'pt' ? 'Projeto de cliente' : 'Client project') : (language === 'pt' ? 'Demonstração' : 'Demo') }}</p>
-        <div class="small-tags"><span v-for="technology in project.technologies" :key="technology">{{ technology }}</span></div>
+        <TechnologyIcons :technologies="project.technologies" :language="language" />
         <div class="project-links">
             <button v-if="previewUrl(project)" class="text-link" type="button" @click="$emit('explore', project)">{{ language === 'pt' ? 'Explorar site' : 'Explore website' }}<ArrowUpRight :size="14" /></button>
             <a v-else-if="project.category === 'landing-page' && project.liveUrl" class="text-link" :href="project.liveUrl" target="_blank" rel="noopener noreferrer">{{ language === 'pt' ? 'Abrir site' : 'Open website' }}<ArrowUpRight :size="14" /></a>

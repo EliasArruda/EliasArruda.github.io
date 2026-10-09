@@ -12,7 +12,7 @@ function frameMessage(event: MessageEvent) {
 const mode = ref<'desktop' | 'tablet' | 'mobile'>('desktop');
 const loading = ref(true);
 const timedOut = ref(false);
-const url = computed(() => previewUrl(props.project));
+const url = computed(() => { const path = previewUrl(props.project); return path ? `${path}?lang=${props.language}` : undefined; });
 const opener = document.activeElement as HTMLElement | null;
 const overflow = document.body.style.overflow;
 let timer: ReturnType<typeof setTimeout>;

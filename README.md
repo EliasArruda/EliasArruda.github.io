@@ -1,8 +1,8 @@
 # Portfólio — Elias Arruda
 
-Portfólio Vue 3 + TypeScript + Vite com apresentação, **Built by me**, serviços e contato. O layout original foi preservado, com Feitos por mim imediatamente abaixo de Me. Idiomas português/inglês, temas claro/escuro e tecnologias identificadas por etiquetas de texto.
+Portfólio Vue 3 + TypeScript + Vite com apresentação, **Built by me**, serviços e contato. O layout original foi preservado, com Feitos por mim imediatamente abaixo de Me. Idiomas português/inglês, temas claro/escuro e tecnologias representadas por ícones acessíveis.
 
-A vitrine preserva os dois projetos profissionais e reúne quatro marcas fictícias: Barber & Co, Almeida & Associados, Sapore Cucina e Paw & Care. Cada demonstração tem composição própria em português, navegação responsiva e interações locais. Formulários simulam respostas; não enviam dados nem realizam reservas.
+A vitrine preserva os três projetos profissionais (Voxen, VeyraScreen e portfólio) e reúne quatro marcas fictícias: Barber & Co, Almeida & Associados, Sapore Cucina e Paw & Care. Cada demonstração tem composição própria com PT/EN, navegação responsiva e interações locais. Formulários simulam respostas; não enviam dados nem realizam reservas.
 
 ## Executar e verificar
 
@@ -24,4 +24,6 @@ Com Chromium instalado no sistema: `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin
 
 O build atualiza `src/data/github.json` usando o calendário público, com fallback ao último snapshot; nenhum token é incluído no frontend. Depois verifica tipos, compila Vue e monta as quatro demos em um único `dist`. O workflow verifica PRs e publica no GitHub Pages após push na `main`. Não há publicação por abertura do PR.
 
-O visualizador carrega um único iframe sob demanda, com sandbox `allow-scripts`, fonte incorporada, tamanhos reais desktop/tablet/celular . Ao fechar, desmonta o iframe e restaura foco e scroll. A seleção de idioma e tema do portfólio é armazenada localmente.
+O visualizador carrega um único iframe sob demanda, com sandbox `allow-scripts`, fonte incorporada, tamanhos reais desktop/tablet/celular . Ao fechar, desmonta o iframe e restaura foco e scroll. A seleção de idioma e tema do portfólio é armazenada localmente. As demos herdam o idioma via `?lang=pt` ou `?lang=en` e também oferecem seleção própria.
+
+Os cards de serviços usam superfícies na paleta existente. O fundo estrelado das tecnologias respeita pausa, visibilidade da página e reduced motion. GitHub Activity exibe calendário sem números nas células, total e dias ativos calculados do snapshot público. O contato mantém o formulário e o link de e-mail com rótulo, sem endereço exposto no texto.

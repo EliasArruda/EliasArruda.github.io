@@ -138,10 +138,10 @@ test('portfolio: four real screenshots, preserved projects, keyboard tabs and co
     }
     const landing = page.getByRole('tab', { name: 'Landing Pages' });
     await landing.focus(); await page.keyboard.press('ArrowRight');
-    await expect(page.locator('.project')).toHaveCount(2);
+    await expect(page.locator('.project')).toHaveCount(3);
     await expect(page.getByRole('heading', { name: 'VeyraScreen', exact: true })).toBeVisible();
-    await expect(page.locator('.project-image').first()).toHaveAttribute('href', 'https://veyrascreen.onrender.com/');
-    await expect(page.locator('.project img')).toHaveAttribute('src', '/veyra-preview.jpg');
+    await expect(page.locator('.project').filter({has: page.getByRole('heading', { name: 'VeyraScreen', exact: true })}).locator('.project-image')).toHaveAttribute('href', 'https://veyrascreen.onrender.com/');
+    await expect(page.locator('.project img[src="/veyra-preview.jpg"]')).toHaveCount(1);
     await page.keyboard.press('Home');
     await expect(landing).toHaveAttribute('aria-selected', 'true');
     await expect(page.getByRole('link', { name: 'Solicitar orçamento' })).toHaveAttribute('href', '#contato');
@@ -158,7 +158,7 @@ for (const [index, slug] of demos.entries()) {
         const scroll = await page.evaluate(() => scrollY);
         await opener.click();
         await expect(page.locator('iframe')).toHaveCount(1);
-        await expect(page.locator('iframe')).toHaveAttribute('src', `/demos/${slug}/`);
+        await expect(page.locator('iframe')).toHaveAttribute('src', `/demos/${slug}/?lang=pt`);
         const frame = page.frameLocator('iframe');
         await expect(frame.locator('html')).toHaveAttribute('data-demo-ready', 'true');
         await expect(frame.locator('h1')).toBeVisible();
@@ -196,9 +196,95 @@ test('original portfolio layout with projects immediately after Me', async ({ pa
     expect(await page.locator('#sobre').evaluate(element => element.nextElementSibling?.id)).toBe('projeto');
     await expect(page.locator('.typing-line')).toBeVisible();
     await expect(page.locator('#tech-stack')).toBeVisible();
-    await expect(page.locator('.project-technologies')).toHaveCount(0);
+    await expect(page.locator('.project-technologies')).toHaveCount(4);
     for (const width of [1440, 768, 390, 320]) {
         await page.setViewportSize({ width, height: 900 });
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     }
 });
+
+
+for (const slug of demos) {
+    test(`${slug}: PT/EN content, controls, responsive layout and accessible labels`, async ({ page }) => {
+        const errors: string[] = [];
+        page.on('pageerror', error => errors.push(error.message));
+        await page.goto(`/demos/${slug}/?lang=en`);
+        await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+        await expect(page.getByRole('group', { name: 'Page language' })).toBeVisible();
+        await expect(page.getByRole('button', { name: 'English', exact: true })).toHaveAttribute('aria-pressed', 'true');
+        await expect(page.locator('.demo-notice')).toContainText('Fictional brand');
+        await expect(page).toHaveTitle(/Demo project/);
+        const english = await page.locator('h1').innerText();
+        for (const width of [1440, 768, 390, 320]) {
+            await page.setViewportSize({ width, height: 900 });
+            expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+        }
+        await page.getByRole('button', { name: 'Open menu' }).click();
+        await expect(page.locator('.site-nav')).toBeVisible();
+        await page.keyboard.press('Escape');
+        await page.getByRole('button', { name: 'Português', exact: true }).click();
+        await expect(page.locator('html')).toHaveAttribute('lang', 'pt-BR');
+        expect(await page.locator('h1').innerText()).not.toBe(english);
+        await expect(page.locator('.demo-notice')).toContainText('Marca e informações fictícias');
+        await page.getByRole('button', { name: 'English', exact: true }).click();
+        await expect(page.locator('h1')).toHaveText(english, { useInnerText: true });
+        expect(errors).toEqual([]);
+    });
+}
+
+test('English demo flows translate feedback and keep selected service values stable', async ({ page }) => {
+    await page.goto('/demos/barbearia/?lang=en');
+    await page.getByRole('button', { name: 'Book a cut and beard' }).click();
+    await expect(page.locator('#book-service')).toHaveValue('Corte + barba');
+    await page.getByLabel('Your name', { exact: true }).fill('Demo person');
+    await page.getByLabel('Preferred date').fill(tomorrow());
+    await page.locator('#booking button[type=submit]').click();
+    await expect(page.locator('#booking [role="status"]')).toContainText('No appointment has been made');
+    await page.keyboard.press('Escape');
+    await page.getByRole('button', { name: 'Português', exact: true }).click();
+    await page.getByRole('button', { name: 'Escolher meu horário' }).click();
+    await expect(page.locator('#booking [role="status"]')).toContainText('Nenhuma reserva foi realizada');
+    await page.goto('/demos/advocacia/?lang=en');
+    await page.getByLabel('Name', { exact: true }).fill('Demo person');
+    await page.getByLabel('Email', { exact: true }).fill('demo@example.com');
+    await page.getByLabel('Demo message', { exact: true }).fill('An illustrative message with no personal information.');
+    await page.getByRole('button', { name: 'Try a demo enquiry' }).click();
+    await expect(page.locator('.form-status')).toContainText('No message was sent');
+    await page.goto('/demos/culinaria/?lang=en');
+    await page.getByRole('button', { name: 'Mains', exact: true }).click();
+    await expect(page.locator('[data-menu-status]')).toContainText('Dishes shown: 1');
+    await page.getByRole('button', { name: 'Reserve a table' }).click();
+    await page.getByLabel('Your name', { exact: true }).fill('Demo person');
+    await page.getByLabel('Preferred date').fill(tomorrow());
+    await page.locator('#booking button[type=submit]').click();
+    await expect(page.locator('#booking [role="status"]')).toContainText('No reservation has been made');
+    await page.goto('/demos/pet/?lang=en');
+    await page.getByRole('link', { name: 'Choose grooming' }).click();
+    await page.getByLabel("Pet's name").fill('Buddy');
+    await page.getByRole('button', { name: 'Next step' }).click();
+    await expect(page.locator('[data-step-label]')).toHaveText('Step 2 of 2');
+    await page.getByRole('button', { name: 'Português', exact: true }).click();
+    await expect(page.locator('[data-step-label]')).toHaveText('Etapa 2 de 2');
+    await page.getByRole('button', { name: 'English', exact: true }).click();
+    await page.getByLabel('Your name', { exact: true }).fill('Demo person');
+    await page.getByLabel('Preferred date').fill(tomorrow());
+    await page.getByRole('button', { name: 'Try a demo booking' }).click();
+    await expect(page.locator('.form-status')).toContainText('No appointment was made and no details were sent');
+});
+
+ test('requested icons, Voxen, contact labels and galaxy motion preferences', async ({ page }) => {
+ await page.goto('/');
+ await expect(page.locator('.brand img')).toHaveAttribute('src', '/brand-mark.svg');
+ await expect(page.locator('.hero-tags svg')).toHaveCount(4);
+ await expect(page.locator('.project-technologies li[title="HTML"]')).toHaveCount(4);
+ await expect(page.locator('#contato')).not.toContainText('eliaspessoal06@gmail.com');
+ await page.getByRole('tab', {name:'Projetos Profissionais'}).click();
+ await expect(page.getByRole('heading',{name:'Voxen',exact:true})).toBeVisible();
+ await expect(page.locator('.project img[src="/images/projects/voxen.webp"]')).toBeVisible();
+ await page.locator('#tech-stack').scrollIntoViewIfNeeded();
+ await page.getByRole('button', {name:'Pausar animações'}).click();
+ await expect(page.locator('.galaxy-backdrop')).toHaveClass(/galaxy-paused/);
+ await page.emulateMedia({reducedMotion:'reduce'});
+ expect(await page.locator('.galaxy-backdrop i').first().evaluate(e=>getComputedStyle(e).animationName)).toBe('none');
+ await expect(page.locator('.activity-overview')).toContainText('dias ativos');
+ });
