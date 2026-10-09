@@ -9,18 +9,18 @@ Quatro demonstrações fictícias em HTML/CSS/JS, sem backend:
 | `/demos/culinaria/` | Sapore Cucina | Filtros do cardápio, reserva simulada, galeria |
 | `/demos/pet/` | Paw & Care | Formulário em duas etapas, serviços, FAQ |
 
-Todas oferecem PT/EN, incluindo mensagens, atributos acessíveis, metadados e menus. Preços, equipes, endereços e horários são ilustrativos. Fotografias e fontes têm registros de origem e licença em `demo-kit/`. A página jurídica não apresenta resultados garantidos ou credenciais reais.
+As demonstrações usam português. Preços, equipes, endereços e horários são ilustrativos. Fotografias e fontes têm registros de origem e licença em `demo-kit/`. A página jurídica não apresenta resultados garantidos ou credenciais reais.
 
 ## Adicionar a quinta demo
 
 1. Crie `demos/seu-slug/index.html` e `assets/style.css` com assets relativos. Use slug minúsculo com números/hífens; não use symlinks.
-2. Crie `translations.json` com pares de texto original português → inglês. Inclua atributos acessíveis, placeholders, títulos e metadados. Mantenha nomes de marca sem tradução.
-3. Inclua, nessa ordem, scripts deferidos `assets/translations.js`, `assets/i18n.js` e `assets/interactions.js`. Use as convenções de elementos `data-*` das demos existentes para reutilizar interações; acrescente CSS próprio e o controle de idioma.
+2. Escreva conteúdo e atributos acessíveis próprios da marca fictícia.
+3. Inclua o script deferido `assets/interactions.js`. Use as convenções de elementos `data-*` das demos existentes para reutilizar interações; acrescente CSS próprio.
 4. Capture a página real e salve a imagem otimizada em `public/images/projects/seu-slug.webp`.
 5. Registre em `src/data/projects.ts`: textos PT/EN, categoria `landing-page`, tipo `demo`, tecnologias, screenshot, `liveUrl: '/demos/seu-slug/'` e `embeddable: true`.
-6. Execute build e testes; verifique URL direta e iframe nos dois idiomas e tamanhos móveis.
+6. Execute build e testes; verifique URL direta e iframe em desktop e tamanhos móveis.
 
-`scripts/copy-demos.mjs` valida pastas/index, copia artefatos e kit compartilhado para `dist/demos/<slug>/assets`, combina os dicionários e incorpora fontes WOFF2 no CSS. Isso permite fontes locais no iframe de origem opaca. Não execute scripts de build provenientes dos dados cadastrados. Sites com gerador próprio devem gerar HTML estático antes da montagem e fornecer dicionário compatível ou adaptar o kit.
+`scripts/copy-demos.mjs` valida pastas/index, copia artefatos e kit compartilhado para `dist/demos/<slug>/assets` e incorpora fontes WOFF2 no CSS. Isso permite fontes locais no iframe de origem opaca. Não execute scripts de build provenientes dos dados cadastrados. Sites com gerador próprio devem gerar HTML estático antes da montagem ou adaptar o kit.
 
 ## Visualizador e formulários
 

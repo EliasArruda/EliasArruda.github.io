@@ -22,9 +22,6 @@ for (const entry of await readdir(source, { withFileTypes: true })) {
         if (!shared.isFile()) throw new Error(`Invalid shared asset: ${shared.name}`);
         await cp(join(resolve('demo-kit'), shared.name), join(assets, shared.name), { errorOnExist: true, force: false });
     }
-    const commonTranslations = JSON.parse(await readFile(resolve('demo-kit/translations.json'), 'utf8'));
-    const ownTranslations = JSON.parse(await readFile(join(path, 'translations.json'), 'utf8'));
-    await writeFile(join(assets, 'translations.js'), `window.demoTranslations = ${JSON.stringify({ ...commonTranslations, ...ownTranslations })};\n`);
     // Opaque-origin sandbox frames cannot fetch same-site fonts without CORS headers.
     // Embed the required WOFF2 faces, so the exact typography works on any static host.
     const style = await readFile(join(path, 'assets/style.css'), 'utf8');

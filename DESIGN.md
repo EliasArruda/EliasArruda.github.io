@@ -13,6 +13,6 @@ As quatro demos são mundos independentes definidos pelo pedido. Implementação
 
 Fotos ilustrativas, nunca apresentadas como clientes ou equipe. Sem depoimentos, métricas ou credenciais fictícias. Bordas leves, sem sombras de cards; movimento reduzido desativa transições e scroll suave. Controles com altura mínima de 44 px. Layouts de 320 px em diante, imagens dimensionadas e lazy loading abaixo da dobra.
 
-## Refinamento de hierarquia e idioma
+## Ordem das seções
 
-A apresentação é seguida imediatamente por Built by me. Serviços conduzem ao contato; stack e calendário ficam disponíveis numa seção expansível. Acentos lilás e verde organizam títulos e metadados, enquanto ícones identificam tecnologias sem repetir pequenas etiquetas. As quatro demos oferecem português e inglês, mantendo identidade, dados selecionados e feedback ao alternar idioma.
+Layout original preservado. Feitos por mim fica imediatamente abaixo de Me; stack, atividade e demais elementos mantêm apresentação anterior. As demos usam português.

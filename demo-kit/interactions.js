@@ -1,4 +1,4 @@
-const t = (key, values) => window.demoI18n?.t(key, values) || key;
+const t = (key, values = {}) => key.replace(/\{(\w+)\}/g, (_, name) => values[name] ?? `{${name}}`);
 /* Local demonstrations only. No analytics, requests, storage or real submissions. */
 const menuButton = document.querySelector('.menu-toggle');
 const navigation = document.querySelector('.site-nav');
