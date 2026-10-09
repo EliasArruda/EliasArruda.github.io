@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from "vue";
-import { usePortfolioMotion } from "./usePortfolioMotion";
-usePortfolioMotion();
+import { computed, nextTick, onMounted, onUnmounted, ref } from "vue";
 import { useTheme } from "./useTheme";
 const { theme, toggleTheme } = useTheme();
 import {
@@ -52,37 +50,20 @@ import ProjectGallery from "./components/projects/ProjectGallery.vue";
 const motionPaused = ref(false);
 const activeSection = ref("inicio");
 const navMore = ref<HTMLDetailsElement | null>(null);
-const typed = ref("");
-const typingPhrase = computed(() =>
-    en.value ? "Interfaces, APIs & web applications" : "Interfaces, APIs e aplicações web",
-);
+const technicalDetails = ref<HTMLDetailsElement | null>(null);
+const revealTechnical = () => { if (technicalDetails.value) technicalDetails.value.open = true; };
+const revealTechnicalHash = async () => {
+    const id = window.location.hash.slice(1);
+    if (id !== 'tech-stack' && id !== 'github-heading') return;
+    revealTechnical();
+    await nextTick();
+    document.getElementById(id)?.scrollIntoView();
+};
+onMounted(() => { revealTechnicalHash(); window.addEventListener('hashchange', revealTechnicalHash); });
+onUnmounted(() => window.removeEventListener('hashchange', revealTechnicalHash));
+
 let motionCleanup = () => {};
 onMounted(() => {
-    const reduced = matchMedia("(prefers-reduced-motion: reduce)");
-    let index = 0,
-        backward = false,
-        hold = 0;
-    const timer = setInterval(() => {
-        if (reduced.matches || motionPaused.value) {
-            typed.value = typingPhrase.value;
-            return;
-        }
-        if (document.hidden) return;
-        if (hold > 0) {
-            hold--;
-            return;
-        }
-        index += backward ? -1 : 1;
-        index = Math.max(0, Math.min(index, typingPhrase.value.length));
-        typed.value = typingPhrase.value.slice(0, index);
-        if (index === typingPhrase.value.length) {
-            backward = true;
-            hold = 32;
-        } else if (index === 0) {
-            backward = false;
-            hold = 5;
-        }
-    }, 75);
     const observer = new IntersectionObserver(
         (entries) => {
             for (const entry of entries)
@@ -95,7 +76,6 @@ onMounted(() => {
         if (el) observer.observe(el);
     }
     motionCleanup = () => {
-        clearInterval(timer);
         observer.disconnect();
     };
 });
@@ -553,8 +533,6 @@ onMounted(() => {
 
 <template>
     <div :class="['portfolio-app', { 'motion-paused': motionPaused }]">
-        <div class="cursor-trail" aria-hidden="true"><span></span></div>
-        <div class="scroll-progress" aria-hidden="true"></div>
         <a class="skip-link" href="#conteudo">{{ copy.skip }}</a>
         <header class="topbar">
             <a class="brand" href="#inicio" :aria-label="copy.homeLabel"><strong>EA</strong></a>
@@ -576,9 +554,9 @@ onMounted(() => {
                     <details ref="navMore" class="nav-more">
                         <summary>{{ en ? "More" : "Mais" }}<ChevronDown :size="12" /></summary>
                         <div class="nav-dropdown">
-                            <a href="#tech-stack" @click="navMore && (navMore.open = false)"
+                            <a href="#tech-stack" @click="navMore && (navMore.open = false); revealTechnical()"
                                 >Stack & skills</a
-                            ><a href="#github-heading" @click="navMore && (navMore.open = false)"
+                            ><a href="#github-heading" @click="navMore && (navMore.open = false); revealTechnical()"
                                 >GitHub Activity</a
                             ><a href="#servicos" @click="navMore && (navMore.open = false)">{{
                                 en ? "Services" : "Serviços"
@@ -617,41 +595,21 @@ onMounted(() => {
         </header>
         <main id="conteudo">
             <section id="inicio" class="hero">
-                <div class="hero-lights" aria-hidden="true"><i></i><i></i><i></i></div>
                 <div class="hero-content">
-                    <span class="hero-badge"
-                        ><Sparkles :size="16" />{{
-                            en ? "Ready to build your next idea" : "Pronto para sua próxima ideia"
-                        }}</span
-                    >
                     <p class="hero-name">
                         {{ en ? "Hi, I’m Elias Arruda" : "Olá, eu sou Elias Arruda" }}
                     </p>
                     <h1>
-                        {{ en ? "Full Stack" : "Desenvolvedor" }}<br /><span>{{
-                            en ? "Developer" : "Full Stack"
+                        {{ en ? "Websites & applications," : "Sites e aplicações," }}<br /><span>{{
+                            en ? "built around your idea." : "feitos para sua ideia."
                         }}</span>
                     </h1>
-                    <div class="typing-line">
-                        <span class="sr-only">{{ typingPhrase }}</span
-                        ><span aria-hidden="true">{{ typed }}<i></i></span>
-                    </div>
-                    <p class="hero-description">
-                        {{
-                            en
-                                ? "Web experiences built with thoughtful interfaces, solid foundations and attention to every detail."
-                                : "Experiências web com interfaces bem cuidadas, uma base sólida e atenção em cada detalhe."
-                        }}
-                    </p>
-                    <div class="hero-tags">
-                        <span>Vue</span><span>TypeScript</span><span>.NET</span
-                        ><span>PostgreSQL</span>
-                    </div>
+                    <p class="hero-description">{{ copy.intro }}</p>
                     <div class="hero-actions">
                         <a href="#projeto" class="button"
-                            >{{ en ? "Projects" : "Projetos" }}<ArrowUpRight :size="17" /></a
+                            >{{ en ? "Explore my work" : "Conhecer meu trabalho" }}<ArrowUpRight :size="17" /></a
                         ><a href="#contato" class="button button-secondary"
-                            >{{ en ? "Contact" : "Contato" }}<Mail :size="17"
+                            >{{ en ? "Let’s talk" : "Vamos conversar" }}<Mail :size="17"
                         /></a>
                     </div>
                     <div class="hero-socials">
@@ -693,7 +651,6 @@ onMounted(() => {
                     <div class="section-inner">
                         <div class="section-line">
                             <div>
-                                <p class="section-kicker">{{ en ? "About" : "Sobre" }}</p>
                                 <h2>Me<span>.</span></h2>
                             </div>
                             <span class="small-note">{{
@@ -714,31 +671,48 @@ onMounted(() => {
                                 <h3>Elias Arruda</h3>
                                 <p>{{ extra.aboutBody }}</p>
                                 <p>{{ extra.aboutSecond }}</p>
-                                <p class="muted">
-                                    {{
-                                        en
-                                            ? "From the first idea to deployment: websites, landing pages and custom applications."
-                                            : "Da primeira ideia à publicação: sites, landing pages e aplicações sob medida."
-                                    }}
-                                </p>
-                                <p class="skills-label">Skills</p>
-                                <div class="inline-skills">
-                                    <span v-for="tech in techs" :key="tech.slug" :title="tech.title"
-                                        ><svg viewBox="0 0 24 24" aria-hidden="true">
-                                            <path :d="tech.path" /></svg
-                                        ><span class="sr-only">{{ tech.title }}</span></span
-                                    >
-                                </div>
+
                             </div>
                         </div>
                     </div>
                 </section>
-                <GithubActivity :en="en" />
+                <section id="projeto" class="projects-section">
+                    <div class="section-inner">
+                        <div class="section-line">
+                            <div>
+                                <h2>{{ en ? "Built by me" : "Feitos por mim" }}<span>.</span></h2>
+                            </div>
+                            <a
+                                href="https://github.com/EliasArruda?tab=repositories"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                >GitHub<ArrowUpRight :size="16"
+                            /></a>
+                        </div>
+                        <ProjectGallery :language="language" />
+                    </div>
+                </section>
+                <section id="servicos" class="services-section">
+                    <div class="section-inner">
+                        <div class="section-line">
+                            <h2>{{ en ? "Let’s build" : "Vamos construir" }}<span>.</span></h2>
+                        </div>
+                        <div class="services-grid">
+                            <article v-for="(service, index) in copy.services" :key="service.title">
+                                <component
+                                    :is="[Globe2, PanelsTopLeft, AppWindow][index]"
+                                    :size="25"
+                                />
+                                <h3>{{ service.title }}</h3>
+                                <p>{{ service.description }}</p>
+                            </article>
+                        </div>
+                    </div>
+                </section>
+                <details ref="technicalDetails" class="technical-details">
+                    <summary><span>{{ en ? "Tools & activity" : "Ferramentas & atividade" }}</span><span class="technical-caption">{{ en ? "A closer look at how I build" : "Um olhar sobre como eu construo" }}</span><ChevronDown :size="18" /></summary>
                 <section id="tech-stack" class="stack-section">
                     <div class="section-inner">
-                        <p class="section-kicker">
-                            {{ en ? "MY SKILLSET" : "MINHAS TECNOLOGIAS" }}
-                        </p>
                         <h2>
                             {{ en ? "The magic" : "O que faz" }}
                             <span>{{ en ? "behind." : "acontecer." }}</span>
@@ -777,49 +751,12 @@ onMounted(() => {
                         </button>
                     </div>
                 </section>
-                <section id="projeto" class="projects-section">
-                    <div class="section-inner">
-                        <div class="section-line">
-                            <div>
-                                <p class="section-kicker">
-                                    {{ en ? "SELECTED WORK" : "TRABALHOS SELECIONADOS" }}
-                                </p>
-                                <h2>{{ en ? "Built by me" : "Feitos por mim" }}<span>.</span></h2>
-                            </div>
-                            <a
-                                href="https://github.com/EliasArruda?tab=repositories"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                >GitHub<ArrowUpRight :size="16"
-                            /></a>
-                        </div>
-                        <ProjectGallery :language="language" />
-                    </div>
-                </section>
-                <section id="servicos" class="services-section">
-                    <div class="section-inner">
-                        <div class="section-line">
-                            <h2>{{ en ? "Let’s build" : "Vamos construir" }}<span>.</span></h2>
-                        </div>
-                        <div class="services-grid">
-                            <article v-for="(service, index) in copy.services" :key="service.title">
-                                <component
-                                    :is="[Globe2, PanelsTopLeft, AppWindow][index]"
-                                    :size="25"
-                                />
-                                <h3>{{ service.title }}</h3>
-                                <p>{{ service.description }}</p>
-                            </article>
-                        </div>
-                    </div>
-                </section>
+                <GithubActivity :en="en" />
+                </details>
                 <section id="contato" class="contact-section">
                     <div class="section-inner">
                         <div class="section-line">
                             <div>
-                                <p class="section-kicker">
-                                    {{ en ? "HAVE SOMETHING IN MIND?" : "TEM UMA IDEIA EM MENTE?" }}
-                                </p>
                                 <h2>{{ en ? "Let’s talk" : "Vamos conversar" }}<span>.</span></h2>
                             </div>
                         </div>

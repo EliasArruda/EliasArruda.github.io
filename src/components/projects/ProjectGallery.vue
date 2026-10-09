@@ -19,7 +19,7 @@ function explore(project: PortfolioProject) { if (previewUrl(project)) selected.
             <div v-if="visible.length" class="projects-grid"><ProjectCard v-for="project in visible" :key="project.id" :project="project" :language="language" @explore="explore" /></div>
             <div v-else class="projects-empty"><p>{{ language === 'pt' ? 'Novos projetos estão a caminho.' : 'New projects are on the way.' }}</p></div>
             <div v-if="panel === 'landing-page'" class="projects-cta">
-                <div><h3>{{ language === 'pt' ? 'Gostou do que viu?' : 'Like what you see?' }}</h3><p>{{ language === 'pt' ? 'Posso desenvolver uma experiência semelhante para o seu negócio.' : 'I can build a similar experience for your business.' }}</p></div>
+                <div><h3>{{ language === 'pt' ? 'Seu negócio pode ser o próximo.' : 'Your business could be next.' }}</h3><p>{{ language === 'pt' ? 'Desenvolvo sites modernos e personalizados para transformar a presença digital do seu negócio.' : 'I build modern, custom websites to transform the digital presence of your business.' }}</p></div>
                 <a class="text-link" href="#contato">{{ language === 'pt' ? 'Solicitar orçamento' : 'Request a quote' }}<ArrowUpRight :size="16" /></a>
             </div>
         </template>

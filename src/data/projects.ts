@@ -6,6 +6,7 @@ export type PortfolioProject = {
     description: LocalizedText;
     category: ProjectCategory;
     projectType: 'demo' | 'client' | 'personal';
+    segment?: LocalizedText;
     image?: string;
     imageAlt?: LocalizedText;
     technologies: string[];
@@ -16,6 +17,122 @@ export type PortfolioProject = {
 };
 
 export const projects: PortfolioProject[] = [
+{
+    "id": "barbearia",
+    "title": {
+        "pt": "Barber & Co.",
+        "en": "Barber & Co."
+    },
+    "segment": {
+        "pt": "Barbearia",
+        "en": "Barbershop"
+    },
+    "description": {
+        "pt": "Barbearia contemporânea: serviços, galeria interativa e um ritual de agendamento.",
+        "en": "Contemporary barbershop with services, an interactive gallery and a booking flow."
+    },
+    "category": "landing-page",
+    "projectType": "demo",
+    "image": "/images/projects/barbearia.webp",
+    "imageAlt": {
+        "pt": "Captura real da página Barber & Co.",
+        "en": "Actual screenshot of Barber & Co."
+    },
+    "technologies": [
+        "HTML",
+        "CSS",
+        "JavaScript"
+    ],
+    "liveUrl": "/demos/barbearia/",
+    "embeddable": true
+},
+{
+    "id": "advocacia",
+    "title": {
+        "pt": "Almeida & Associados",
+        "en": "Almeida & Associados"
+    },
+    "segment": {
+        "pt": "Advocacia",
+        "en": "Law firm"
+    },
+    "description": {
+        "pt": "Presença institucional com áreas de atuação, perguntas frequentes e contato demonstrativo.",
+        "en": "An institutional experience with practice areas, FAQs and a demo contact form."
+    },
+    "category": "landing-page",
+    "projectType": "demo",
+    "image": "/images/projects/advocacia.webp",
+    "imageAlt": {
+        "pt": "Captura real da página Almeida & Associados",
+        "en": "Actual screenshot of Almeida & Associados"
+    },
+    "technologies": [
+        "HTML",
+        "CSS",
+        "JavaScript"
+    ],
+    "liveUrl": "/demos/advocacia/",
+    "embeddable": true
+},
+{
+    "id": "culinaria",
+    "title": {
+        "pt": "Sapore Cucina",
+        "en": "Sapore Cucina"
+    },
+    "segment": {
+        "pt": "Restaurante",
+        "en": "Restaurant"
+    },
+    "description": {
+        "pt": "Uma experiência à mesa, com cardápio filtrável, fotografia e reserva demonstrativa.",
+        "en": "A dining experience with menu filters, photography and a demo reservation flow."
+    },
+    "category": "landing-page",
+    "projectType": "demo",
+    "image": "/images/projects/culinaria.webp",
+    "imageAlt": {
+        "pt": "Captura real da página Sapore Cucina",
+        "en": "Actual screenshot of Sapore Cucina"
+    },
+    "technologies": [
+        "HTML",
+        "CSS",
+        "JavaScript"
+    ],
+    "liveUrl": "/demos/culinaria/",
+    "embeddable": true
+},
+{
+    "id": "pet",
+    "title": {
+        "pt": "Paw & Care",
+        "en": "Paw & Care"
+    },
+    "segment": {
+        "pt": "Pet Shop",
+        "en": "Pet shop"
+    },
+    "description": {
+        "pt": "Cuidado e acolhimento em um site com serviços e agendamento em duas etapas.",
+        "en": "A welcoming pet care website with services and a two-step appointment flow."
+    },
+    "category": "landing-page",
+    "projectType": "demo",
+    "image": "/images/projects/pet.webp",
+    "imageAlt": {
+        "pt": "Captura real da página Paw & Care",
+        "en": "Actual screenshot of Paw & Care"
+    },
+    "technologies": [
+        "HTML",
+        "CSS",
+        "JavaScript"
+    ],
+    "liveUrl": "/demos/pet/",
+    "embeddable": true
+},
     {
         "id": "veyrascreen",
         "title": {

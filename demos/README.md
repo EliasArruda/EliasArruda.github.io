@@ -1,34 +1,31 @@
-# Demonstrações estáticas
+# Landing pages estáticas
 
-Esta pasta contém somente artefatos estáticos prontos para publicação, nunca código-fonte Nuxt.
-Não há demonstrações comerciais cadastradas atualmente.
+Quatro demonstrações fictícias em HTML/CSS/JS, sem backend:
 
-## Adicionar uma landing page
+| Caminho | Marca | Interações |
+| --- | --- | --- |
+| `/demos/barbearia/` | Barber & Co | Serviços, agendamento simulado, galeria, FAQ |
+| `/demos/advocacia/` | Almeida & Associados | Áreas de atuação, contato simulado, FAQ |
+| `/demos/culinaria/` | Sapore Cucina | Filtros do cardápio, reserva simulada, galeria |
+| `/demos/pet/` | Paw & Care | Formulário em duas etapas, serviços, FAQ |
 
-1. Gere o site estático. Para Nuxt, configure `app.baseURL: '/demos/seu-slug/'` e execute `nuxt generate`.
-2. Copie o conteúdo gerado de `.output/public/` para `demos/seu-slug/`. Para HTML simples, coloque `index.html` e assets relativos nessa pasta.
-3. Inclua um screenshot otimizado em `public/images/projects/seu-slug.webp`.
-4. Cadastre o projeto em `src/data/projects.ts`, com título e descrição em `pt` e `en`, `category: 'landing-page'`, tipo `demo` ou `client`, tecnologias, imagem, `liveUrl: '/demos/seu-slug/'` e `embeddable: true`.
-5. Execute `pnpm run build` e teste a URL direta e o visualizador em `pnpm run preview`.
+Todas oferecem PT/EN, incluindo mensagens, atributos acessíveis, metadados e menus. Preços, equipes, endereços e horários são ilustrativos. Fotografias e fontes têm registros de origem e licença em `demo-kit/`. A página jurídica não apresenta resultados garantidos ou credenciais reais.
 
-O build copia `demos/<slug>/` para `dist/demos/<slug>/`, exige `index.html`, rejeita symlinks e não altera o restante do portfólio. Use slugs com letras minúsculas, números e hífens. Assets e links precisam ser relativos ou incluir `/demos/<slug>/`; URLs absolutas na raiz não ganham prefixo automaticamente. Não dependa de fallback SPA: cada rota precisa de HTML estático gerado.
+## Adicionar a quinta demo
 
-O pipeline existente publica apenas `dist`, em um único artefato. Não publique demos separadamente sobre o mesmo site. Projetos com build próprio devem gerar seus artefatos antes da etapa de montagem, sem instalar dependências ou executar scripts arbitrários a partir dos dados cadastrados.
+1. Crie `demos/seu-slug/index.html` e `assets/style.css` com assets relativos. Use slug minúsculo com números/hífens; não use symlinks.
+2. Crie `translations.json` com pares de texto original português → inglês. Inclua atributos acessíveis, placeholders, títulos e metadados. Mantenha nomes de marca sem tradução.
+3. Inclua, nessa ordem, scripts deferidos `assets/translations.js`, `assets/i18n.js` e `assets/interactions.js`. Use as convenções de elementos `data-*` das demos existentes para reutilizar interações; acrescente CSS próprio e o controle de idioma.
+4. Capture a página real e salve a imagem otimizada em `public/images/projects/seu-slug.webp`.
+5. Registre em `src/data/projects.ts`: textos PT/EN, categoria `landing-page`, tipo `demo`, tecnologias, screenshot, `liveUrl: '/demos/seu-slug/'` e `embeddable: true`.
+6. Execute build e testes; verifique URL direta e iframe nos dois idiomas e tamanhos móveis.
 
-## Permissões da prévia
+`scripts/copy-demos.mjs` valida pastas/index, copia artefatos e kit compartilhado para `dist/demos/<slug>/assets`, combina os dicionários e incorpora fontes WOFF2 no CSS. Isso permite fontes locais no iframe de origem opaca. Não execute scripts de build provenientes dos dados cadastrados. Sites com gerador próprio devem gerar HTML estático antes da montagem e fornecer dicionário compatível ou adaptar o kit.
 
-Somente URLs locais registradas no formato `/demos/<slug>/` entram no visualizador. O sandbox permite scripts, mas mantém origem opaca: não libera acesso ao DOM/storage do portfólio, formulários, popups ou navegação do documento principal. Não adicione `allow-same-origin` junto de `allow-scripts` para conteúdo da mesma origem.
+## Visualizador e formulários
 
-Recursos que dependem dessas permissões podem precisar de adaptação ou da opção “Abrir em nova aba”. Escape fecha o modal quando o foco está no documento principal. Eventos de teclado dentro do iframe não atravessam a fronteira do documento; o botão fechar continua acessível por Tab. Não contorne políticas de incorporação externas. Audite todo artefato antes de hospedá-lo: a URL direta compartilha a origem do portfólio.
+Somente caminhos locais cadastrados entram no visualizador. O sandbox permite scripts, mas não acesso ao DOM/storage principal, submissões, popups ou navegação superior. Mantenha `allow-scripts` sem `allow-same-origin`.
 
-Para Escape também funcionar quando o foco está dentro da demo, inclua este bridge no HTML gerado. O portfólio aceita a mensagem somente do iframe ativo. Isso não concede permissões de origem.
+Formulários validam campos e simulam feedback via JavaScript sem submissão ou requisição. Isso funciona dentro do sandbox e na URL direta. `interactions.js` fecha primeiro dialogs internos e encaminha Escape para o portfólio; o portfólio aceita mensagens somente do iframe ativo. O botão fechar e abertura em outra aba também estão disponíveis.
 
-```html
-<script>
-document.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape' && window.parent !== window) {
-    window.parent.postMessage('portfolio-preview:close', location.origin);
-  }
-});
-</script>
-```
+Publique somente o `dist` completo, em um artefato, pelo workflow existente. A URL direta compartilha a origem do portfólio; revise qualquer código novo antes de hospedá-lo.
