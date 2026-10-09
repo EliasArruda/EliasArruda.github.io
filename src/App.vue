@@ -48,6 +48,7 @@ import {
 } from "simple-icons";
 import SkillOrb from "./components/SkillOrb.vue";
 import GithubActivity from "./components/GithubActivity.vue";
+import ProjectGallery from "./components/projects/ProjectGallery.vue";
 const motionPaused = ref(false);
 const activeSection = ref("inicio");
 const navMore = ref<HTMLDetailsElement | null>(null);
@@ -783,7 +784,7 @@ onMounted(() => {
                                 <p class="section-kicker">
                                     {{ en ? "SELECTED WORK" : "TRABALHOS SELECIONADOS" }}
                                 </p>
-                                <h2>{{ en ? "Built by me" : "Feito por mim" }}<span>.</span></h2>
+                                <h2>{{ en ? "Built by me" : "Feitos por mim" }}<span>.</span></h2>
                             </div>
                             <a
                                 href="https://github.com/EliasArruda?tab=repositories"
@@ -792,61 +793,7 @@ onMounted(() => {
                                 >GitHub<ArrowUpRight :size="16"
                             /></a>
                         </div>
-                        <div class="projects-grid">
-                            <article class="project">
-                                <a
-                                    class="project-image"
-                                    href="https://veyrascreen.onrender.com/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    :aria-label="extra.demo"
-                                    ><img
-                                        src="/veyra-preview.jpg"
-                                        :alt="extra.preview"
-                                        width="1440"
-                                        height="1000"
-                                        loading="eager" /><span><ArrowUpRight :size="23" /></span
-                                ></a>
-                                <h3>VeyraScreen</h3>
-                                <p>{{ extra.veyraDesc }}</p>
-                                <div class="small-tags">
-                                    <span>Blazor</span><span>.NET</span><span>WebRTC</span>
-                                </div>
-                                <a
-                                    class="text-link"
-                                    href="https://github.com/EliasArruda/VeyraScreen"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    ><Code2 :size="16" />{{ extra.code }}<ArrowUpRight :size="14"
-                                /></a>
-                            </article>
-                            <article class="project">
-                                <a
-                                    class="project-image portfolio-preview"
-                                    href="https://github.com/EliasArruda/EliasArruda.github.io"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    :aria-label="
-                                        en ? 'Portfolio source code' : 'Código do portfólio'
-                                    "
-                                    ><small>EA / PORTFOLIO</small
-                                    ><strong>Ideas into<br /><em>experiences.</em></strong
-                                    ><span><ArrowUpRight :size="23" /></span
-                                ></a>
-                                <h3>{{ en ? "Personal portfolio" : "Portfólio pessoal" }}</h3>
-                                <p>{{ extra.portfolioDesc }}</p>
-                                <div class="small-tags">
-                                    <span>Vue</span><span>TypeScript</span><span>CSS</span>
-                                </div>
-                                <a
-                                    class="text-link"
-                                    href="https://github.com/EliasArruda/EliasArruda.github.io"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    ><Code2 :size="16" />{{ extra.code }}<ArrowUpRight :size="14"
-                                /></a>
-                            </article>
-                        </div>
+                        <ProjectGallery :language="language" />
                     </div>
                 </section>
                 <section id="servicos" class="services-section">
