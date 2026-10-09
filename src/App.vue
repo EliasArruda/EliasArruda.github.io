@@ -46,6 +46,7 @@ import {
     siPostgresql,
     siGit,
 } from "simple-icons";
+import LanguageIcon from "./components/LanguageIcon.vue";
 import GalaxyBackdrop from "./components/GalaxyBackdrop.vue";
 import SkillOrb from "./components/SkillOrb.vue";
 import GithubActivity from "./components/GithubActivity.vue";
@@ -558,7 +559,7 @@ onMounted(() => {
         <div class="scroll-progress" aria-hidden="true"></div>
         <a class="skip-link" href="#conteudo">{{ copy.skip }}</a>
         <header class="topbar">
-            <a class="brand" href="#inicio" :aria-label="copy.homeLabel"><img src="/brand-mark.svg" width="40" height="40" alt="" /></a>
+            <a class="brand" href="#inicio" :aria-label="copy.homeLabel"><svg class="brand-symbol" viewBox="0 0 64 64" aria-hidden="true"><path d="M17 13h32v8H27v7h18v8H27v7h22v8H17V13Z" fill="currentColor" /></svg></a>
             <div class="topbar-right">
                 <nav :aria-label="copy.navLabel" class="pill-nav">
                     <a
@@ -607,10 +608,10 @@ onMounted(() => {
                         <Sun v-if="theme === 'dark'" :size="17" /><Moon v-else :size="17" />
                     </button>
                     <details ref="languageMenu" class="language-switcher">
-                        <summary>{{ en ? "EN" : "PT" }}<ChevronDown :size="11" /></summary>
+                        <summary><LanguageIcon :language="language" />{{ en ? "EN" : "PT" }}<ChevronDown :size="12" /></summary>
                         <div class="language-options">
-                            <button @click="setLanguage('pt')" :aria-pressed="!en">Português</button
-                            ><button @click="setLanguage('en')" :aria-pressed="en">English</button>
+                            <button @click="setLanguage('pt')" :aria-pressed="!en"><LanguageIcon language="pt" />Português</button
+                            ><button @click="setLanguage('en')" :aria-pressed="en"><LanguageIcon language="en" />English</button>
                         </div>
                     </details>
                 </div>

@@ -1370,3 +1370,27 @@ button.text-link { background: none; border: 0; padding: 0; }
 .data-date { font-size:11px; margin-top:16px; }
 @media(max-width:760px) { .activity-overview { flex-wrap:wrap; gap:10px 24px; } .activity-overview p { flex-basis:100%; margin-left:0; } .activity-overview strong { font-size:25px; } .contribution-panel { padding:20px; } .services-grid article { padding:22px; } }
 .project-technologies svg.lucide { fill:none; }
+
+/* Topbar: quiet navigation, one clear contact action. */
+.topbar { background:var(--page); backdrop-filter:none; border-bottom:1px solid var(--border); padding-block:14px; }
+.brand { width:46px; height:46px; border-radius:13px; background:color-mix(in srgb,var(--accent) 14%,var(--surface)); color:var(--accent); border:1px solid color-mix(in srgb,var(--accent) 25%,var(--border)); }
+.brand-symbol { width:34px; height:34px; }
+.topbar-right { gap:28px; }
+.pill-nav { gap:5px; padding:0; background:none; border-radius:0; box-shadow:none; }
+.pill-nav > a, .nav-more > summary { padding:10px 14px; min-height:42px; border-radius:8px; color:var(--text-soft); font-size:12px; }
+.pill-nav > a:hover, .nav-more > summary:hover { background:var(--surface); color:var(--accent); }
+.pill-nav > a[aria-current='location'] { background:color-mix(in srgb,var(--accent) 12%,var(--page)); color:var(--accent); }
+.nav-more > summary { background:none; }
+.pill-nav .nav-contact { background:var(--accent); color:var(--on-accent); margin-left:12px; padding-inline:18px; font-size:12px; }
+.pill-nav .nav-contact:hover { background:color-mix(in srgb,var(--accent) 85%,var(--text)); color:var(--on-accent); }
+.top-controls { gap:8px; padding-left:18px; border-left:1px solid var(--border); }
+.theme-toggle { display:grid; place-items:center; width:38px; height:42px; border-radius:8px; color:var(--text-soft); }
+.theme-toggle:hover { background:var(--surface); color:var(--accent); }
+.language-switcher summary { display:flex; align-items:center; gap:8px; min-height:42px; padding:8px 10px; border-radius:8px; color:var(--text-soft); font-size:12px; }
+.language-switcher summary:hover, .language-switcher[open] summary { background:var(--surface); }
+.language-icon { display:block; width:21px; height:15px; flex-shrink:0; }
+.language-options button { display:flex; align-items:center; gap:10px; min-height:42px; }
+.nav-dropdown, .language-options { top:calc(100% + 10px); border-radius:12px; box-shadow:0 12px 28px #0002; }
+@media(max-width:1000px) { .topbar-right { gap:12px; } .pill-nav > a, .nav-more > summary { padding-inline:10px; } }
+@media(max-width:760px) { .topbar { padding-block:10px; gap:8px; } .brand { top:10px; width:42px; height:42px; border-radius:12px; } .topbar-right { gap:9px; } .top-controls { border:0; height:42px; padding:0; } .pill-nav { gap:2px; } .pill-nav > a, .nav-more > summary { min-height:40px; font-size:11px; padding:8px; } .pill-nav .nav-contact { margin-left:0; padding-inline:10px; font-size:10px; } .nav-dropdown { right:0; } }
+@media(max-width:380px) { .pill-nav > a, .nav-more > summary { font-size:10px; padding-inline:6px; } .pill-nav .nav-contact { padding-inline:8px; font-size:9px; } }

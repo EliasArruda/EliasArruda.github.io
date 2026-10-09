@@ -20,3 +20,5 @@ Layout original preservado. Feitos por mim fica imediatamente abaixo de Me; stac
 ## Ajustes solicitados
 
 Favicon existente no cabeçalho; ícones de tecnologias nos cards e antes dos rótulos do hero. Serviços recebem fundos sutis lilás, verde e neutro, com texto legível nos dois temas. A seção de tecnologias usa estrelas e névoa lilás/verde, com movimento pausável e reduced motion. O calendário GitHub usa células limpas, escala tonal verde e resumo de contribuições/dias ativos, sem alterar os dados. O endereço de contato não aparece como texto. Voxen usa captura do README do repositório público.
+
+Topbar refinada: superfície sólida, navegação sem cápsula externa, estado ativo lilás e contato como ação principal. Marca E usa o desenho do favicon, na cor de destaque e fundo arredondado. Idiomas têm bandeiras vetoriais à esquerda do código e das opções; ambas preservam nomes textuais acessíveis.

@@ -274,7 +274,7 @@ test('English demo flows translate feedback and keep selected service values sta
 
  test('requested icons, Voxen, contact labels and galaxy motion preferences', async ({ page }) => {
  await page.goto('/');
- await expect(page.locator('.brand img')).toHaveAttribute('src', '/brand-mark.svg');
+ await expect(page.locator('.brand-symbol')).toBeVisible();
  await expect(page.locator('.hero-tags svg')).toHaveCount(4);
  await expect(page.locator('.project-technologies li[title="HTML"]')).toHaveCount(4);
  await expect(page.locator('#contato')).not.toContainText('eliaspessoal06@gmail.com');
@@ -288,3 +288,21 @@ test('English demo flows translate feedback and keep selected service values sta
  expect(await page.locator('.galaxy-backdrop i').first().evaluate(e=>getComputedStyle(e).animationName)).toBe('none');
  await expect(page.locator('.activity-overview')).toContainText('dias ativos');
  });
+
+test('topbar language icons, menu keyboard and responsive layout', async ({ page }) => {
+ await page.goto('/');
+ await page.locator('.language-switcher summary').click();
+ await expect(page.getByRole('button',{name:'Português',exact:true}).locator('svg')).toBeVisible();
+ await expect(page.getByRole('button',{name:'English',exact:true}).locator('svg')).toBeVisible();
+ await page.getByRole('button',{name:'English',exact:true}).click();
+ await expect(page.locator('.language-switcher summary')).toContainText('EN');
+ await expect(page.locator('.language-switcher summary svg.language-icon')).toBeVisible();
+ await page.locator('.nav-more summary').click();
+ await page.keyboard.press('Escape');
+ await expect(page.locator('.nav-more')).not.toHaveAttribute('open','');
+ for(const width of [1440,768,390,320]) {
+ await page.setViewportSize({width,height:900});
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+ await expect(page.locator('.brand')).toBeVisible();
+ }
+});
