@@ -46,8 +46,11 @@ import {
     siPostgresql,
     siGit,
 } from "simple-icons";
+import LanguageIcon from "./components/LanguageIcon.vue";
+import GalaxyBackdrop from "./components/GalaxyBackdrop.vue";
 import SkillOrb from "./components/SkillOrb.vue";
 import GithubActivity from "./components/GithubActivity.vue";
+import ProjectGallery from "./components/projects/ProjectGallery.vue";
 const motionPaused = ref(false);
 const activeSection = ref("inicio");
 const navMore = ref<HTMLDetailsElement | null>(null);
@@ -556,7 +559,7 @@ onMounted(() => {
         <div class="scroll-progress" aria-hidden="true"></div>
         <a class="skip-link" href="#conteudo">{{ copy.skip }}</a>
         <header class="topbar">
-            <a class="brand" href="#inicio" :aria-label="copy.homeLabel"><strong>EA</strong></a>
+            <a class="brand" href="#inicio" :aria-label="copy.homeLabel"><svg class="brand-symbol" viewBox="0 0 64 64" aria-hidden="true"><path d="M17 13h32v8H27v7h18v8H27v7h22v8H17V13Z" fill="currentColor" /></svg></a>
             <div class="topbar-right">
                 <nav :aria-label="copy.navLabel" class="pill-nav">
                     <a
@@ -605,10 +608,10 @@ onMounted(() => {
                         <Sun v-if="theme === 'dark'" :size="17" /><Moon v-else :size="17" />
                     </button>
                     <details ref="languageMenu" class="language-switcher">
-                        <summary>{{ en ? "EN" : "PT" }}<ChevronDown :size="11" /></summary>
+                        <summary><LanguageIcon :language="language" />{{ en ? "EN" : "PT" }}<ChevronDown :size="12" /></summary>
                         <div class="language-options">
-                            <button @click="setLanguage('pt')" :aria-pressed="!en">Português</button
-                            ><button @click="setLanguage('en')" :aria-pressed="en">English</button>
+                            <button @click="setLanguage('pt')" :aria-pressed="!en"><LanguageIcon language="pt" />Português</button
+                            ><button @click="setLanguage('en')" :aria-pressed="en"><LanguageIcon language="en" />English</button>
                         </div>
                     </details>
                 </div>
@@ -643,8 +646,7 @@ onMounted(() => {
                         }}
                     </p>
                     <div class="hero-tags">
-                        <span>Vue</span><span>TypeScript</span><span>.NET</span
-                        ><span>PostgreSQL</span>
+                        <span v-for="item in [{name: 'Vue', path: siVuedotjs.path}, {name: 'TypeScript', path: siTypescript.path}, {name: '.NET', path: siDotnet.path}, {name: 'PostgreSQL', path: siPostgresql.path}]" :key="item.name"><svg viewBox="0 0 24 24" aria-hidden="true"><path :d="item.path" /></svg>{{ item.name }}</span>
                     </div>
                     <div class="hero-actions">
                         <a href="#projeto" class="button"
@@ -732,8 +734,25 @@ onMounted(() => {
                         </div>
                     </div>
                 </section>
+                <section id="projeto" class="projects-section">
+                    <div class="section-inner">
+                        <div class="section-line">
+                            <div>
+                                <h2>{{ en ? "Built by me" : "Feitos por mim" }}<span>.</span></h2>
+                            </div>
+                            <a
+                                href="https://github.com/EliasArruda?tab=repositories"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                >GitHub<ArrowUpRight :size="16"
+                            /></a>
+                        </div>
+                        <ProjectGallery :language="language" />
+                    </div>
+                </section>
                 <GithubActivity :en="en" />
                 <section id="tech-stack" class="stack-section">
+                    <GalaxyBackdrop :paused="motionPaused" />
                     <div class="section-inner">
                         <p class="section-kicker">
                             {{ en ? "MY SKILLSET" : "MINHAS TECNOLOGIAS" }}
@@ -776,79 +795,6 @@ onMounted(() => {
                         </button>
                     </div>
                 </section>
-                <section id="projeto" class="projects-section">
-                    <div class="section-inner">
-                        <div class="section-line">
-                            <div>
-                                <p class="section-kicker">
-                                    {{ en ? "SELECTED WORK" : "TRABALHOS SELECIONADOS" }}
-                                </p>
-                                <h2>{{ en ? "Built by me" : "Feito por mim" }}<span>.</span></h2>
-                            </div>
-                            <a
-                                href="https://github.com/EliasArruda?tab=repositories"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                >GitHub<ArrowUpRight :size="16"
-                            /></a>
-                        </div>
-                        <div class="projects-grid">
-                            <article class="project">
-                                <a
-                                    class="project-image"
-                                    href="https://veyrascreen.onrender.com/"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    :aria-label="extra.demo"
-                                    ><img
-                                        src="/veyra-preview.jpg"
-                                        :alt="extra.preview"
-                                        width="1440"
-                                        height="1000"
-                                        loading="eager" /><span><ArrowUpRight :size="23" /></span
-                                ></a>
-                                <h3>VeyraScreen</h3>
-                                <p>{{ extra.veyraDesc }}</p>
-                                <div class="small-tags">
-                                    <span>Blazor</span><span>.NET</span><span>WebRTC</span>
-                                </div>
-                                <a
-                                    class="text-link"
-                                    href="https://github.com/EliasArruda/VeyraScreen"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    ><Code2 :size="16" />{{ extra.code }}<ArrowUpRight :size="14"
-                                /></a>
-                            </article>
-                            <article class="project">
-                                <a
-                                    class="project-image portfolio-preview"
-                                    href="https://github.com/EliasArruda/EliasArruda.github.io"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    :aria-label="
-                                        en ? 'Portfolio source code' : 'Código do portfólio'
-                                    "
-                                    ><small>EA / PORTFOLIO</small
-                                    ><strong>Ideas into<br /><em>experiences.</em></strong
-                                    ><span><ArrowUpRight :size="23" /></span
-                                ></a>
-                                <h3>{{ en ? "Personal portfolio" : "Portfólio pessoal" }}</h3>
-                                <p>{{ extra.portfolioDesc }}</p>
-                                <div class="small-tags">
-                                    <span>Vue</span><span>TypeScript</span><span>CSS</span>
-                                </div>
-                                <a
-                                    class="text-link"
-                                    href="https://github.com/EliasArruda/EliasArruda.github.io"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    ><Code2 :size="16" />{{ extra.code }}<ArrowUpRight :size="14"
-                                /></a>
-                            </article>
-                        </div>
-                    </div>
-                </section>
                 <section id="servicos" class="services-section">
                     <div class="section-inner">
                         <div class="section-line">
@@ -889,7 +835,7 @@ onMounted(() => {
                                     }}
                                 </p>
                                 <a class="email-link" href="mailto:eliaspessoal06@gmail.com"
-                                    ><Mail :size="17" />eliaspessoal06@gmail.com<ArrowUpRight
+                                    ><Mail :size="17" />{{ en ? "Send an email" : "Enviar um e-mail" }}<ArrowUpRight
                                         :size="15"
                                 /></a>
                             </div>

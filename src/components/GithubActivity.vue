@@ -2,6 +2,8 @@
 import { computed } from "vue";
 import data from "../data/github.json";
 const props = defineProps<{ en: boolean }>();
+const activeDays = computed(() => data.days.filter(day => day.count > 0).length);
+const range = computed(() => { const format = (date: string) => new Intl.DateTimeFormat(props.en ? 'en' : 'pt-BR', {month:'short', year:'numeric', timeZone:'UTC'}).format(new Date(date + 'T12:00:00Z')); return `${format(data.days[0]!.date)} — ${format(data.days[data.days.length - 1]!.date)}`; });
 const weeks = computed(() => {
     const result: (typeof data.days)[] = [];
     for (let i = 0; i < data.days.length; i += 7) result.push(data.days.slice(i, i + 7));
@@ -30,6 +32,7 @@ const dayTitle = (day: (typeof data.days)[number]) =>
                 >
             </div>
             <div class="contribution-panel">
+                <div class="activity-overview"><div><strong>{{ data.total }}</strong><span>{{ en ? 'contributions' : 'contribuições' }}</span></div><div><strong>{{ activeDays }}</strong><span>{{ en ? 'active days' : 'dias ativos' }}</span></div><p>{{ range }}</p></div>
                 <div
                     class="calendar-scroll"
                     tabindex="0"
@@ -48,7 +51,7 @@ const dayTitle = (day: (typeof data.days)[number]) =>
                                 :class="['contribution-day', 'level-' + day.level]"
                                 :title="dayTitle(day)"
                                 :aria-label="dayTitle(day)"
-                                >{{ day.count || "" }}</span
+                                ></span
                             >
                         </div>
                     </div>

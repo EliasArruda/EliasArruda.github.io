@@ -1,0 +1,86 @@
+[
+  {
+    "file": "demos/barbearia/assets/interior.webp",
+    "source": "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=1400&q=82&fm=webp",
+    "download": "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=1400&q=82&fm=webp",
+    "license": "https://unsplash.com/license",
+    "bytes": 66988
+  },
+  {
+    "file": "demos/barbearia/assets/corte.webp",
+    "source": "https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&w=900&q=82&fm=webp",
+    "download": "https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&w=900&q=82&fm=webp",
+    "license": "https://unsplash.com/license",
+    "bytes": 97234
+  },
+  {
+    "file": "demos/barbearia/assets/detalhe.webp",
+    "source": "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&w=900&q=82&fm=webp",
+    "download": "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&w=900&q=82&fm=webp",
+    "license": "https://unsplash.com/license",
+    "bytes": 253350
+  },
+  {
+    "file": "demos/advocacia/assets/escritorio.webp",
+    "source": "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1400&q=82&fm=webp",
+    "download": "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1400&q=82&fm=webp",
+    "license": "https://unsplash.com/license",
+    "bytes": 163742
+  },
+  {
+    "file": "demos/culinaria/assets/mesa.webp",
+    "source": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1500&q=82&fm=webp",
+    "download": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1500&q=82&fm=webp",
+    "license": "https://unsplash.com/license",
+    "bytes": 248814
+  },
+  {
+    "file": "demos/culinaria/assets/massa.webp",
+    "source": "https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=900&q=82&fm=webp",
+    "download": "https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=900&q=82&fm=webp",
+    "license": "https://unsplash.com/license",
+    "bytes": 103192
+  },
+  {
+    "file": "demos/culinaria/assets/salada.webp",
+    "source": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=900&q=82&fm=webp",
+    "download": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=900&q=82&fm=webp",
+    "license": "https://unsplash.com/license",
+    "bytes": 161448
+  },
+  {
+    "file": "demos/culinaria/assets/sobremesa.webp",
+    "source": "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=900&q=82&fm=webp",
+    "download": "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=900&q=82&fm=webp",
+    "license": "https://unsplash.com/license",
+    "bytes": 103024
+  },
+  {
+    "file": "demos/culinaria/assets/ambiente.webp",
+    "source": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1000&q=82&fm=webp",
+    "download": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1000&q=82&fm=webp",
+    "license": "https://unsplash.com/license",
+    "bytes": 195572
+  },
+  {
+    "file": "demos/pet/assets/cachorro.webp",
+    "source": "https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=1200&q=82&fm=webp",
+    "download": "https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=1200&q=82&fm=webp",
+    "license": "https://unsplash.com/license",
+    "bytes": 269322
+  },
+  {
+    "file": "demos/pet/assets/gato.webp",
+    "source": "https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=900&q=82&fm=webp",
+    "download": "https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=900&q=82&fm=webp",
+    "license": "https://unsplash.com/license",
+    "bytes": 222326
+  },
+  {
+    "file": "demos/pet/assets/amigo.webp",
+    "source": "https://images.unsplash.com/photo-1587300003388-59208cc962cb?auto=format&fit=crop&w=900&q=82&fm=webp",
+    "download": "https://images.unsplash.com/photo-1587300003388-59208cc962cb?auto=format&fit=crop&w=900&q=82&fm=webp",
+    "license": "https://unsplash.com/license",
+    "bytes": 54576
+  }
+]
