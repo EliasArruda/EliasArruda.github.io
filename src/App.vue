@@ -738,9 +738,6 @@ onMounted(() => {
                     <div class="section-inner">
                         <div class="section-line">
                             <div>
-                                <p class="section-kicker">
-                                    {{ en ? "SELECTED WORK" : "TRABALHOS SELECIONADOS" }}
-                                </p>
                                 <h2>{{ en ? "Built by me" : "Feitos por mim" }}<span>.</span></h2>
                             </div>
                             <a
